@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 import { geoPatterson } from 'd3-geo-projection';
 import { feature } from 'topojson';
 
-const DrawWorldMap = () => {
+const drawWorldMap = () => {
   // setting up svg element, making size responsive
   const dimension = { width: 960, height: 500 };
   // append an svg element to the DOM
@@ -14,7 +14,9 @@ const DrawWorldMap = () => {
     .attr('viewBox', `0 0 ${dimension.width} ${dimension.height}`);
 
   // create a new projection function
-  const projection = geoPatterson();
+  const projection = geoPatterson()
+    .center([0, 30]) // cropping off Antarctica
+
   // create a GeoPath function from the projection
   const path = d3.geoPath()
     .projection(projection);
@@ -101,4 +103,4 @@ const DrawWorldMap = () => {
   })
 }
 
-export default DrawWorldMap;
+export default drawWorldMap;
