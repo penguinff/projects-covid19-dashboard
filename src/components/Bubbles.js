@@ -13,11 +13,6 @@ const Bubbles = () => {
     fetchData();
   }, [])
 
-  // const countryNameArray = countryResults.map(item => item.country);
-  // const countryCaseArray = countryResults.map(item => item.cases);
-  // console.log(countryNameArray, countryCaseArray);
-  // console.log(countryResults);
-
   return (
     <div>
       {drawBubbles(countryResults)}
