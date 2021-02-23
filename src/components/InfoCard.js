@@ -1,6 +1,6 @@
 const InfoCard = () => {
   return (
-    <div className="col s12 m4 l3">
+    <div className="col s12 m4 l4">
       <div className="card">
         <div className="card-content indigo-text">
           <span className="card-title">Card Title</span>
