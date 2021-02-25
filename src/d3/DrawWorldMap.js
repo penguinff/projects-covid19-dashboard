@@ -4,7 +4,7 @@ import { feature } from 'topojson';
 
 const drawWorldMap = () => {
   // setting up svg element, making size responsive
-  const dimension = { width: 960, height: 500 };
+  const dimension = { width: 960, height: 420 };
   // append an svg element to the DOM
   const svg = d3.select('#base-worldmap')
     .append('div')
@@ -14,8 +14,7 @@ const drawWorldMap = () => {
     .attr('viewBox', `0 0 ${dimension.width} ${dimension.height}`);
 
   // create a new projection function
-  const projection = geoPatterson()
-    .center([0, 30]) // cropping off Antarctica
+  const projection = geoPatterson();
 
   // create a GeoPath function from the projection
   const path = d3.geoPath()
@@ -34,8 +33,7 @@ const drawWorldMap = () => {
   const zoom = d3.zoom()
     .scaleExtent([1, 5])
     .on('zoom', (event) => {
-      graph.selectAll('path')
-        .attr('transform', event.transform)
+      graph.attr('transform', event.transform)
     })
   svg.call(zoom);
   // zoom button
@@ -58,49 +56,45 @@ const drawWorldMap = () => {
     });
 
   // fetching topojson & country name, then use the fetched data to draw map
-  Promise.all([
-    d3.json('https://unpkg.com/world-atlas@1.1.4/world/50m.json'),
-    d3.tsv('https://unpkg.com/world-atlas@1.1.4/world/50m.tsv')
-  ]).then(([topoJSONData, tsvData]) => {
+   d3.json('https://unpkg.com/world-atlas@2.0.2/countries-50m.json')
+    .then(topoJSONData => {
 
-    // convert topojson to geojson
-    const countries = feature(topoJSONData, topoJSONData.objects.countries);
-    // get the features property from geojson object
-    const countryData = countries.features;
-    // get country name from fetched tsv data
-    const countryName = {};
-    tsvData.forEach(item => countryName[item.iso_n3] = item.name);
+      // convert topojson to geojson
+      const countries = feature(topoJSONData, topoJSONData.objects.countries);
+      // get the features property from geojson object
+      const countryData = countries.features;
 
-    // select paths from the graph & pass country data
-    const paths = graph.selectAll('path')
-      .data(countryData);
+      // select paths from the graph & pass country data
+      const paths = graph.selectAll('path')
+        .data(countryData);
 
-    // append path to the group & set 'd' attribute
-    paths.enter()
-      .append('path')
-      .attr('class', 'map-country')
-      .attr('d', path)
-      .attr('stroke', '#fff')
-      .attr('stroke-width', 0.5)
-      .attr('fill', '#D9D9DB')
-      .append('title')
-      .text(d => countryName[d.id]);
+      // append path to the group & set 'd' attribute
+      paths.enter()
+        .append('path')
+        .attr('class', 'map-country')
+        .attr('d', path)
+        .attr('stroke', '#fff')
+        .attr('stroke-width', 0.5)
+        .attr('fill', '#D9D9DB')
+        .append('title')
+        .text(d => d.properties.name);
 
-    // add mouse hover events
-    graph.selectAll('.map-country')
-      .on('mouseover', (event) => {
-        d3.select(event.currentTarget)
-          .transition().duration(300)
-          .attr('stroke', '#fff')
-          .attr('fill', '#4287f5')
-      })
-      .on('mouseout', (event) => {
-        d3.select(event.currentTarget)
-          .transition().duration(300)
-          .attr('stroke', '#fff')
-          .attr('fill', '#D9D9DB')
-      });
-  })
+      // add mouse hover events
+      graph.selectAll('.map-country')
+        .on('mouseover', (event) => {
+          d3.select(event.currentTarget)
+            .transition().duration(300)
+            .attr('stroke', '#fff')
+            .attr('fill', '#4287f5')
+        })
+        .on('mouseout', (event) => {
+          d3.select(event.currentTarget)
+            .transition().duration(300)
+            .attr('stroke', '#fff')
+            .attr('fill', '#D9D9DB')
+        });
+
+    })
 }
 
 export default drawWorldMap;

@@ -10,12 +10,13 @@ const WorldMap = () => {
   
   return (
     <div>
-      <Bubbles />
-      <div id="base-worldmap" className='section'>
+      <div>
         <button id="zoom-in">+</button>
         <button id="zoom-out">-</button>
         <button id="reset-map">*</button>
       </div>
+      <div id="base-worldmap" className='section'></div>
+      <Bubbles />
     </div>
 
   );

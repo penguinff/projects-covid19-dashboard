@@ -15,7 +15,27 @@ const Bubbles = () => {
 
   return (
     <div>
-      {drawBubbles(countryResults)}
+      <button 
+        onClick={e => drawBubbles(e.target.value, countryResults)}
+        value='cases'
+      >Cumulative Cases</button>
+      <button 
+        onClick={e => drawBubbles(e.target.value, countryResults)}
+        value='active'
+      >Active Cases</button>
+      <button 
+        onClick={e => drawBubbles(e.target.value, countryResults)}
+        value='casesPerOneMillion'
+      >Cases per one million</button>
+      <button
+        onClick={e => drawBubbles(e.target.value, countryResults)} 
+        value='todayCases'
+      >Today Cases</button>
+      <button 
+        onClick={e => drawBubbles(e.target.value, countryResults)} 
+        value='todayDeaths'
+      >Today Deaths</button>
+      {drawBubbles('cases', countryResults)}
     </div>
   )
 }
