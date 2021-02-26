@@ -1,12 +1,8 @@
 import * as d3 from 'd3';
-import { selectAll } from 'd3';
 import { geoPatterson } from 'd3-geo-projection';
 import { feature } from 'topojson';
 
-const drawWorldMap = (topoJSONData, countryResults) => {
-  // resetting to blank map
-  selectAll('path').remove();
-
+const drawWorldMap = (topoJSONData) => {
   // setting up svg element, making size responsive
   const dimension = { width: 960, height: 420 };
   // append an svg element to the DOM
@@ -33,22 +29,10 @@ const drawWorldMap = (topoJSONData, countryResults) => {
     .attr('d', path({type: 'Sphere'}))
     .attr('fill', '#fff');
 
-  // color scale
-  const colorScale = d3.scaleThreshold()
-    .domain([100, 1000, 10000, 100000, 1000000])
-    // .domain([0, d3.max(countryResults, d => d.casesPerOneMillion)])
-    .range(d3.schemeBlues[7]);
-
   // convert topojson to geojson
   const countries = feature(topoJSONData, topoJSONData.objects.countries);
   // get the features property from geojson object
   const countryData = countries.features;
-  console.log(countryData)
-
-  // country cases
-  const countryCases = {}
-  countryResults.forEach(d => countryCases[d.countryInfo._id] = d.cases)
-  console.log(countryCases)
 
   // select paths from the graph & pass country data
   const paths = graph.selectAll('path')
@@ -61,9 +45,7 @@ const drawWorldMap = (topoJSONData, countryResults) => {
     .attr('d', path)
     .attr('stroke', '#fff')
     .attr('stroke-width', 0.5)
-    // .attr('fill', '#D9D9DB')
-    // .attr('fill', 'none')
-    .attr('fill', d => colorScale(countryCases[d.id]))
+    .attr('fill', '#D9D9DB')
     .append('title')
     .text(d => d.properties.name);
 
@@ -93,20 +75,20 @@ const drawWorldMap = (topoJSONData, countryResults) => {
         )
     });
 
-  // // add mouse hover events
-  // graph.selectAll('.map-country')
-  //   .on('mouseover', (event) => {
-  //     d3.select(event.currentTarget)
-  //       .transition().duration(300)
-  //       .attr('stroke', '#fff')
-  //       .attr('fill', '#4287f5')
-  //   })
-  //   .on('mouseout', (event) => {
-  //     d3.select(event.currentTarget)
-  //       .transition().duration(300)
-  //       .attr('stroke', '#fff')
-  //       .attr('fill', '#D9D9DB')
-  //   });
+  // add mouse hover events
+  graph.selectAll('.map-country')
+    .on('mouseover', (event) => {
+      d3.select(event.currentTarget)
+        .transition().duration(300)
+        .attr('stroke', '#fff')
+        .attr('fill', '#4287f5')
+    })
+    .on('mouseout', (event) => {
+      d3.select(event.currentTarget)
+        .transition().duration(300)
+        .attr('stroke', '#fff')
+        .attr('fill', '#D9D9DB')
+    });
 }
 
 export default drawWorldMap;
