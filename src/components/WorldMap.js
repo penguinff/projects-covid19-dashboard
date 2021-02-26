@@ -20,7 +20,7 @@ const WorldMap = () => {
       const countrydata = await res2.json();
       return [topojson, countrydata]
     }).then((responseData) => {
-      console.log(responseData);
+      // console.log(responseData);
       setMapTopojson(responseData[0])
       setCountryResults(responseData[1])
     })

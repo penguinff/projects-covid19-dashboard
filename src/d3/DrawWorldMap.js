@@ -2,6 +2,7 @@ import * as d3 from 'd3';
 import { selectAll } from 'd3';
 import { geoPatterson } from 'd3-geo-projection';
 import { feature } from 'topojson';
+import { tip as d3tip } from 'd3-v6-tip';
 
 const drawWorldMap = (topoJSONData, countryResults) => {
   // resetting to blank map
@@ -43,15 +44,15 @@ const drawWorldMap = (topoJSONData, countryResults) => {
   const countries = feature(topoJSONData, topoJSONData.objects.countries);
   // get the features property from geojson object
   let countryData = countries.features;
-  console.log(countryData)
-
   // change countryData array's id from string to number to match the id type in countryCases
-  countryData.forEach(item => item.id = +item.id)
+  countryData.forEach(item => item.id = +item.id);
 
   // country cases
   const countryCases = {}
   countryResults.forEach(d => countryCases[d.countryInfo._id] = d.cases);
-  console.log(countryCases)
+  // country names
+  const countryNames = {}
+  countryResults.forEach(d => countryNames[d.countryInfo._id] = d.country);
 
   // select paths from the graph & pass country data
   const paths = graph.selectAll('path')
@@ -67,8 +68,19 @@ const drawWorldMap = (topoJSONData, countryResults) => {
     // .attr('fill', '#D9D9DB')
     // .attr('fill', 'none')
     .attr('fill', d => colorScale(countryCases[(d.id)]))
-    .append('title')
-    .text(d => d.properties.name);
+    // .append('title')
+    // .text(d => d.properties.name);
+
+  // initialize tooltip
+  const tip = d3tip()
+    .attr('class', 'd3-tip')
+    .html((event, d) => {
+      let content = `<div>${countryNames[(d.id)]}</div>`;
+      content += `<div>${countryCases[(d.id)]}</div>`;
+      return content;
+    })
+  // invoke the tip
+  graph.call(tip);
 
   // zoom the map
   const zoom = d3.zoom()
@@ -98,22 +110,26 @@ const drawWorldMap = (topoJSONData, countryResults) => {
 
   // add mouse hover events
   graph.selectAll('.map-country')
-    .on('mouseover', (event) => {
+    .on('mouseover', (event, d) => {
       d3.selectAll('.map-country')
         .transition().duration(200)
+        .style('stroke', 'transparent')
         .style('opacity', 0.3)
       d3.select(event.currentTarget)
         .transition().duration(200)
         .style('opacity', 1)
         .style('stroke', 'black')
+      tip.show(event, d)
     })
-    .on('mouseout', (event) => {
+    .on('mouseout', (event, d) => {
       d3.selectAll('.map-country')
         .transition().duration(200)
+        .style('stroke', 'transparent')
         .style('opacity', 1)
       d3.select(event.currentTarget)
         .transition().duration(200)
         .style('stroke', 'transparent')
+      tip.hide(event, d)
     });
 
 }
