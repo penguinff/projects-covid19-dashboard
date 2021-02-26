@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { schemeDark2, selectAll } from 'd3';
+import { selectAll } from 'd3';
 import { geoPatterson } from 'd3-geo-projection';
 import { feature } from 'topojson';
 
@@ -42,12 +42,15 @@ const drawWorldMap = (topoJSONData, countryResults) => {
   // convert topojson to geojson
   const countries = feature(topoJSONData, topoJSONData.objects.countries);
   // get the features property from geojson object
-  const countryData = countries.features;
+  let countryData = countries.features;
   console.log(countryData)
+
+  // change countryData array's id from string to number to match the id type in countryCases
+  countryData.forEach(item => item.id = +item.id)
 
   // country cases
   const countryCases = {}
-  countryResults.forEach(d => countryCases[d.countryInfo._id] = d.cases)
+  countryResults.forEach(d => countryCases[d.countryInfo._id] = d.cases);
   console.log(countryCases)
 
   // select paths from the graph & pass country data
@@ -63,7 +66,7 @@ const drawWorldMap = (topoJSONData, countryResults) => {
     .attr('stroke-width', 0.5)
     // .attr('fill', '#D9D9DB')
     // .attr('fill', 'none')
-    .attr('fill', d => colorScale(countryCases[d.id]))
+    .attr('fill', d => colorScale(countryCases[(d.id)]))
     .append('title')
     .text(d => d.properties.name);
 

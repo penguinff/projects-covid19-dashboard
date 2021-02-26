@@ -48,7 +48,7 @@ const WorldMap = () => {
       initialRender.current = false;
     } else {
       drawWorldMap(mapTopojson, countryResults);
-      drawBubbles('cases', countryResults);
+      // drawBubbles('cases', countryResults);
     }
   }, [countryResults])
 

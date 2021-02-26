@@ -50,31 +50,32 @@ const drawBubbles = (displayType, countryResults) => {
       .append('title')
       .text(d => d[`${displayType}`]);
 
-  const text = graph.selectAll('text')
-    .data(countryResults);
-  text.enter()
-    .append('text')
-    .attr('class', 'tooltip-text')
-    .attr('transform', d => `translate(${projection([d.countryInfo.long, d.countryInfo.lat])})`)
-    .attr('text-anchor', 'middle')
-    .html(d => d.country + '&#10;' + d[`${displayType}`])
-    // .html(
-    //   '<a href= "http://google.com">'
-    // )
-    .style('opacity', 0)
+  // // add tooltip
+  // const text = graph.selectAll('text')
+  //   .data(countryResults);
+  // text.enter()
+  //   .append('text')
+  //   .attr('class', 'tooltip-text')
+  //   .attr('transform', d => `translate(${projection([d.countryInfo.long, d.countryInfo.lat])})`)
+  //   .attr('text-anchor', 'middle')
+  //   .html(d => d.country + '&#10;' + d[`${displayType}`])
+  //   // .html(
+  //   //   '<a href= "http://google.com">'
+  //   // )
+  //   .style('opacity', 0)
 
-    // add mouse hover events
-    graph.selectAll('.tooltip-text')
-    .on('mouseover', (event) => {
-      d3.select(event.currentTarget)
-        .transition().duration(300)
-        .style('opacity', 1)
-    })
-    .on('mouseout', (event) => {
-      d3.select(event.currentTarget)
-        .transition().duration(300)
-        .style('opacity', 0)
-    });
+  //   // add mouse hover events
+  //   graph.selectAll('.tooltip-text')
+  //   .on('mouseover', (event) => {
+  //     d3.select(event.currentTarget)
+  //       .transition().duration(300)
+  //       .style('opacity', 1)
+  //   })
+  //   .on('mouseout', (event) => {
+  //     d3.select(event.currentTarget)
+  //       .transition().duration(300)
+  //       .style('opacity', 0)
+  //   });
 
 }
 export default drawBubbles; 
