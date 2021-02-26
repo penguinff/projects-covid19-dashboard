@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { selectAll } from 'd3';
+import { schemeDark2, selectAll } from 'd3';
 import { geoPatterson } from 'd3-geo-projection';
 import { feature } from 'topojson';
 
@@ -93,20 +93,26 @@ const drawWorldMap = (topoJSONData, countryResults) => {
         )
     });
 
-  // // add mouse hover events
-  // graph.selectAll('.map-country')
-  //   .on('mouseover', (event) => {
-  //     d3.select(event.currentTarget)
-  //       .transition().duration(300)
-  //       .attr('stroke', '#fff')
-  //       .attr('fill', '#4287f5')
-  //   })
-  //   .on('mouseout', (event) => {
-  //     d3.select(event.currentTarget)
-  //       .transition().duration(300)
-  //       .attr('stroke', '#fff')
-  //       .attr('fill', '#D9D9DB')
-  //   });
+  // add mouse hover events
+  graph.selectAll('.map-country')
+    .on('mouseover', (event) => {
+      d3.selectAll('.map-country')
+        .transition().duration(200)
+        .style('opacity', 0.3)
+      d3.select(event.currentTarget)
+        .transition().duration(200)
+        .style('opacity', 1)
+        .style('stroke', 'black')
+    })
+    .on('mouseout', (event) => {
+      d3.selectAll('.map-country')
+        .transition().duration(200)
+        .style('opacity', 1)
+      d3.select(event.currentTarget)
+        .transition().duration(200)
+        .style('stroke', 'transparent')
+    });
+
 }
 
 export default drawWorldMap;
