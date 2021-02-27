@@ -2,9 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 import drawWorldMap from '../d3/drawWorldMap';
 // import Bubbles from './Bubbles';
 import drawBubbles from '../d3/drawBubbles'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const mapTopojsonAPI = 'https://unpkg.com/world-atlas@1.1.4/world/50m.json';
-// const mapTopojsonAPI = 'https://unpkg.com/world-atlas@2.0.2/countries-50m.json';
+// const mapTopojsonAPI = 'https://unpkg.com/world-atlas@1.1.4/world/50m.json';
+const mapTopojsonAPI = 'https://unpkg.com/world-atlas@2.0.2/countries-50m.json';
 const covidCountryDataAPI = 'https://corona.lmao.ninja/v2/countries';
 
 const WorldMap = () => {
@@ -56,34 +57,29 @@ const WorldMap = () => {
   
   return (
     <div>
-      <div>
-        <button id="zoom-in">+</button>
-        <button id="zoom-out">-</button>
-        <button id="reset-map">*</button>
-      </div>
       <div id="base-worldmap" className='section'></div>
       <div>
-      <button 
-        onClick={e => drawBubbles(e.target.value, countryResults)}
-        value='cases'
-      >Cumulative Cases</button>
-      <button 
-        onClick={e => drawBubbles(e.target.value, countryResults)}
-        value='active'
-      >Active Cases</button>
-      <button 
-        onClick={e => drawBubbles(e.target.value, countryResults)}
-        value='casesPerOneMillion'
-      >Cases per one million</button>
-      <button
-        onClick={e => drawBubbles(e.target.value, countryResults)} 
-        value='todayCases'
-      >Today Cases</button>
-      <button 
-        onClick={e => drawBubbles(e.target.value, countryResults)} 
-        value='todayDeaths'
-      >Today Deaths</button>
-    </div>
+        <button 
+          onClick={e => drawBubbles(e.target.value, countryResults)}
+          value='cases'
+        >Cumulative Cases</button>
+        <button 
+          onClick={e => drawBubbles(e.target.value, countryResults)}
+          value='active'
+        >Active Cases</button>
+        <button 
+          onClick={e => drawBubbles(e.target.value, countryResults)}
+          value='casesPerOneMillion'
+        >Cases per one million</button>
+        <button
+          onClick={e => drawBubbles(e.target.value, countryResults)} 
+          value='todayCases'
+        >Today Cases</button>
+        <button 
+          onClick={e => drawBubbles(e.target.value, countryResults)} 
+          value='todayDeaths'
+        >Today Deaths</button>
+      </div>
     </div>
 
   );

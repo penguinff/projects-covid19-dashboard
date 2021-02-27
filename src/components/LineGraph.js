@@ -1,7 +1,11 @@
+import { faHome } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 const LineGraph = () => {
   
   return (
-    <h1>LineGraph</h1>
+
+    <div><FontAwesomeIcon icon={faHome} /></div>
   )
 }
 
