@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // const mapTopojsonAPI = 'https://unpkg.com/world-atlas@1.1.4/world/50m.json';
 const mapTopojsonAPI = 'https://unpkg.com/world-atlas@2.0.2/countries-50m.json';
-const covidCountryDataAPI = 'https://corona.lmao.ninja/v2/countries';
+const covidCountryDataAPI = 'https://corona.lmao.ninja/v3/covid-19/countries';
 
 const WorldMap = () => {
   const [mapTopojson, setMapTopojson] = useState({});
