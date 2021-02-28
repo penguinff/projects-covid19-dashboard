@@ -3,8 +3,6 @@ import { selectAll } from 'd3';
 import { geoPatterson } from 'd3-geo-projection';
 import { feature } from 'topojson';
 import { tip as d3tip } from 'd3-v6-tip';
-// import { faHome } from "@fortawesome/free-solid-svg-icons";
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const drawWorldMap = (topoJSONData, countryResults) => {
   // resetting to blank map
@@ -37,12 +35,13 @@ const drawWorldMap = (topoJSONData, countryResults) => {
     .attr('class', 'tooltip-rect')
     .attr('x', 30)
     .attr('y', 250)
-    .attr('height', 100)
-    .attr('width', 210)
+    .attr('height', 60)
+    .attr('width', 215)
     .attr("rx", 10)
     .attr("ry", 10)
     .attr('fill', 'white')
     .attr('stroke', 'darkgrey')
+    .attr('stroke-width', 1.5)
     .style('opacity', 0.8)
   tipBox.append('text')
     .attr('class', 'tooltip-text1')
@@ -51,16 +50,16 @@ const drawWorldMap = (topoJSONData, countryResults) => {
     .text('Country COVID-19 Status')
   tipBox.append('text')
     .attr('class', 'tooltip-text2')
-    .attr('transform', 'translate(40,295)')
+    .attr('transform', 'translate(40,298)')
     .attr('fill', '#db0063')
     .text('- Hover over a country -')
   tipBox.append('text')
     .attr('class', 'tooltip-text3')
-    .attr('transform', 'translate(40,315)')
+    .attr('transform', 'translate(40,320)')
     .attr('fill', 'grey')
   tipBox.append('text')
     .attr('class', 'tooltip-text4')
-    .attr('transform', 'translate(40,335)')
+    .attr('transform', 'translate(40,340)')
     .attr('fill', 'grey')
 
   // color scale
@@ -83,6 +82,8 @@ const drawWorldMap = (topoJSONData, countryResults) => {
   // country cases
   const countryCases = {}
   countryResults.forEach(d => countryCases[d.countryInfo._id] = d.cases);
+  // updated time
+  const updatedTime = new Date(countryResults[1].updated).toLocaleString()
   // fotmatting the number
   const formatComma = d3.format(',')
   // country cases formatted
@@ -91,6 +92,13 @@ const drawWorldMap = (topoJSONData, countryResults) => {
   // country deaths formatted
   const countryDeathsFormatted = {}
   countryResults.forEach(d => countryDeathsFormatted[d.countryInfo._id] = formatComma(d.deaths));
+
+  // create a group to manage udpated time
+  svg.append('text')
+  .attr('class', 'updated-time') 
+  .attr('transform', 'translate(750,408)')
+  .attr('fill', 'grey')
+  .text(`Last Updated at: ${updatedTime}`)
 
   // select paths from the graph & pass country data
   const paths = graph.selectAll('path')
@@ -104,8 +112,6 @@ const drawWorldMap = (topoJSONData, countryResults) => {
     .attr('stroke', '#fff')
     .attr('stroke-width', 0.5)
     .attr('fill', d => colorScale(countryCases[(d.id)]))
-    // .append('title')
-    // .text(d => d.properties.name);
 
   // fix the missing COVID-19 data for some countries
   countryData.forEach(d => {
@@ -130,47 +136,61 @@ const drawWorldMap = (topoJSONData, countryResults) => {
   // invoke the tip
   graph.call(tip);
 
-
   // create a group to manage zoom button
   const zoomButtons = svg.append('g')
     .attr('class', '.zoomButtons')
-  const zoomIn = zoomButtons.append('rect')
+  zoomButtons.append('path')
+    .attr('class', 'zoom-icon')
+    .attr('transform', 'translate(33, 33)')
+    .attr('fill', 'black')
+    .attr('d', 'M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z')
+  zoomButtons.append('path')
+    .attr('class', 'zoom-icon')
+    .attr('transform', 'translate(33, 68)')
+    .attr('fill', 'black')
+    .attr('d', 'M19 13H5v-2h14v2z')
+  zoomButtons.append('path')
+    .attr('class', 'zoom-icon')
+    .attr('transform', 'translate(33, 103)')
+    .attr('fill', 'black')
+    .attr('d', 'M19 8l-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C8.97 19.54 10.43 20 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46C15.03 4.46 13.57 4 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z')
+  zoomButtons.append('rect')
     .attr('class', 'map-zoom-in')
     .attr('x', 30)
     .attr('y', 30)
     .attr('height', 30)
     .attr('width', 30)
-    .attr("rx", 5)
-    .attr("ry", 5)
-    .attr('fill', 'pink')
-    .style('opacity', 0.8)
-  // zoomIn.append("FontAwesome")
-  //   .attr("class","fa")
-  //   .attr("x",20)
-  //   .attr("y",20)
-  //   .attr("font-size","20px")
-  //   .attr("fill","pink")
-  //   .attr('icon', '{faHome}')
+    .attr("rx", 3)
+    .attr("ry", 3)
+    .attr('fill', 'white')
+    .attr('stroke', 'black')
+    .attr('stroke-width', 2)
+    .style('opacity', 0.4)
   zoomButtons.append('rect')
     .attr('class', 'map-zoom-out')
     .attr('x', 30)
     .attr('y', 65)
     .attr('height', 30)
     .attr('width', 30)
-    .attr("rx", 5)
-    .attr("ry", 5)
-    .attr('fill', 'pink')
-    .style('opacity', 0.8)
+    .attr("rx", 3)
+    .attr("ry", 3)
+    .attr('fill', 'white')
+    .attr('stroke', 'black')
+    .attr('stroke-width', 2)
+    .style('opacity', 0.4)
   zoomButtons.append('rect')
     .attr('class', 'map-zoom-reset')
     .attr('x', 30)
     .attr('y', 100)
     .attr('height', 30)
     .attr('width', 30)
-    .attr("rx", 5)
-    .attr("ry", 5)
-    .attr('fill', 'pink')
-    .style('opacity', 0.8)
+    .attr("rx", 3)
+    .attr("ry", 3)
+    .attr('fill', 'white')
+    .attr('stroke', 'black')
+    .attr('stroke-width', 2)
+    .style('opacity', 0.4)
+  
   // zoom the map
   const zoom = d3.zoom()
     .scaleExtent([1, 5])
@@ -209,6 +229,8 @@ const drawWorldMap = (topoJSONData, countryResults) => {
         .attr('stroke', 'black')
         .attr('stroke-width', 1)
         .style('opacity', 1)
+      d3.select('.tooltip-rect')
+        .attr('height', 100)
       d3.select('.tooltip-text2')
         .text(countryNames[(d.id)])
       d3.select('.tooltip-text3')
@@ -222,6 +244,8 @@ const drawWorldMap = (topoJSONData, countryResults) => {
         .attr('stroke', 'white')
         .attr('stroke-width', 0.5)
         .style('opacity', 1)
+      d3.select('.tooltip-rect')
+        .attr('height', 60)
       d3.select('.tooltip-text2')
         .text('- Hover over a country -')
       d3.select('.tooltip-text3')

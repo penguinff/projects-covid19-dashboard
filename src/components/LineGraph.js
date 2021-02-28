@@ -1,11 +1,13 @@
-import { faHome } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import MaterialIcon, {colorPalette} from 'material-icons-react';
 
 const LineGraph = () => {
   
   return (
-
-    <div><FontAwesomeIcon icon={faHome} /></div>
+    <div>
+      <h1>Line Graph</h1>
+      <MaterialIcon icon='alarm_on' />
+      
+    </div>
   )
 }
 

@@ -53,19 +53,21 @@
 
 .tooltip-text1 {
   text-decoration: underline;
-  font-size: 15px;
+  font-size: 19px;
   font-weight: bold;
   font-family: 'Roboto Condensed', sans-serif;
+  user-select: none;
 }
-.tooltip-text2 {
-  font-weight: bold;
-  font-family: 'Roboto Condensed', sans-serif;
-}
-.tooltip-text3 {
-  font-weight: bold;
-  font-family: 'Roboto Condensed', sans-serif;
-}
+.tooltip-text2,
+.tooltip-text3,
 .tooltip-text4 {
   font-weight: bold;
+  font-family: 'Roboto Condensed', sans-serif;
+  user-select: none;
+}
+
+.updated-time {
+  font-size: 12px;
+  user-select: none;
   font-family: 'Roboto Condensed', sans-serif;
 }
