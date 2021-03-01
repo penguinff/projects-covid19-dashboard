@@ -8,7 +8,6 @@ const HomePage = () => {
       <InfoCards />
       <WorldMap />
       <LineGraph />
-
     </div>
   );
 }

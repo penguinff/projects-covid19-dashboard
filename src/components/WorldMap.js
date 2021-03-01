@@ -1,12 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
-import drawWorldMap from '../d3/drawWorldMap';
+import { useState, useEffect } from 'react';
+import RenderWorldMap from './RenderWorldMap';
 
 const mapTopojsonAPI = 'https://unpkg.com/world-atlas@2.0.2/countries-50m.json';
 const covidCountryDataAPI = 'https://corona.lmao.ninja/v3/covid-19/countries';
 
 const WorldMap = () => {
-  const [mapTopojson, setMapTopojson] = useState({});
-  const [countryResults, setCountryResults] = useState([]);
+  const [mapTopojson, setMapTopojson] = useState(null);
+  const [countryResults, setCountryResults] = useState(null);
 
   useEffect(() => {
     Promise.all([
@@ -22,20 +22,12 @@ const WorldMap = () => {
     })
   }, [])
 
-  // ensure drawWorldMap run after set state
-  const initialRender = useRef(true);
-  useEffect(() => {
-    if (initialRender.current) {
-      initialRender.current = false;
-    } else {
-      drawWorldMap(mapTopojson, countryResults);
-    }
-  }, [countryResults])
+  if (!mapTopojson || !countryResults) {
+    return <pre>Loading map...</pre>;
+  }
   
   return (
-    <div>
-      <div id="base-worldmap" className='section'></div>
-    </div>
+    <RenderWorldMap topoJSONData={mapTopojson} countryResults={countryResults} />
   );
 };
 

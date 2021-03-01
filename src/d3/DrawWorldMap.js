@@ -1,11 +1,10 @@
 import * as d3 from 'd3';
-import { selectAll } from 'd3';
 import { geoPatterson } from 'd3-geo-projection';
 import { feature } from 'topojson';
 
 const drawWorldMap = (topoJSONData, countryResults) => {
-  // resetting to blank map
-  selectAll('path').remove();
+  // // resetting to blank map
+  // d3.selectAll('path').remove();
 
   // convert topojson to geojson
   const countries = feature(topoJSONData, topoJSONData.objects.countries);
@@ -30,12 +29,11 @@ const drawWorldMap = (topoJSONData, countryResults) => {
   // country deaths formatted
   const countryDeathsFormatted = {}
   countryResults.forEach(d => countryDeathsFormatted[d.countryInfo._id] = formatComma(d.deaths));
-  
+
   // setting up svg element, making size responsive
   const dimension = { width: 960, height: 420 };
   // append an svg element to the DOM
   const svg = d3.select('#base-worldmap')
-    .append('div')
     .append('svg')
     .attr('class', 'map-svg')
     .attr('preserveAspectRatio', 'xMinYMid meet')
