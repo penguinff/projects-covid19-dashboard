@@ -2,7 +2,6 @@ import * as d3 from 'd3';
 import { selectAll } from 'd3';
 import { geoPatterson } from 'd3-geo-projection';
 import { feature } from 'topojson';
-import { tip as d3tip } from 'd3-v6-tip';
 
 const drawWorldMap = (topoJSONData, countryResults) => {
   // resetting to blank map
@@ -81,18 +80,6 @@ const drawWorldMap = (topoJSONData, countryResults) => {
     .attr('stroke', '#fff')
     .attr('stroke-width', 0.5)
     .attr('fill', d => colorScale(countryCases[(d.id)]))
-
-  // initialize tooltip
-  const tip = d3tip()
-    .attr('class', 'd3-tip')
-    .offset([100,100])
-    .html((event, d) => {
-      let content = `<div class='tooltip-name'>${countryNames[(d.id)]}</div>`;
-      content += `<div class='tooltip-case'>Cases: ${countryCases[(d.id)]}</div>`;
-      return content;
-    })
-  // invoke the tip
-  graph.call(tip);
 
   // create a group to manage zoom button
   const zoomButtons = svg.append('g')
