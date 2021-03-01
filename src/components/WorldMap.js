@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import RenderWorldMap from './RenderWorldMap';
 
 const mapTopojsonAPI = 'https://unpkg.com/world-atlas@2.0.2/countries-50m.json';
-const covidCountryDataAPI = 'https://corona.lmao.ninja/v3/covid-19/countries';
+const covidCountryDataAPI = 'https://disease.sh/v3/covid-19/countries?yesterday=false&twoDaysAgo=false&allowNull=true';
 
 const WorldMap = () => {
   const [mapTopojson, setMapTopojson] = useState(null);
   const [countryResults, setCountryResults] = useState(null);
+  const [mapType, setMapType] = useState('cases');
 
   useEffect(() => {
     Promise.all([
@@ -27,7 +28,21 @@ const WorldMap = () => {
   }
   
   return (
-    <RenderWorldMap topoJSONData={mapTopojson} countryResults={countryResults} />
+    <div>
+      <button 
+      onClick={e => setMapType(e.target.value)}
+      value='cases'
+      >Cumulative Cases</button>
+      <button 
+        onClick={e => setMapType(e.target.value)}
+        value='deaths'
+      >Cumulative Deaths</button>
+      <button 
+        onClick={e => setMapType(e.target.value)}
+        value='ratio'
+      >Case-Fatality Ratio</button>
+      <RenderWorldMap topoJSONData={mapTopojson} countryResults={countryResults} mapType={mapType}/>
+    </div>
   );
 };
 

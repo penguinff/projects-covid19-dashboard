@@ -25,7 +25,8 @@
 }
 .tooltip-text2,
 .tooltip-text3,
-.tooltip-text4 {
+.tooltip-text4,
+.tooltip-text5 {
   font-weight: bold;
   font-family: 'Roboto Condensed', sans-serif;
   user-select: none;

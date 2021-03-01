@@ -2,9 +2,9 @@ import * as d3 from 'd3';
 import { geoPatterson } from 'd3-geo-projection';
 import { feature } from 'topojson';
 
-const drawWorldMap = (topoJSONData, countryResults) => {
-  // // resetting to blank map
-  // d3.selectAll('path').remove();
+const drawWorldMap = (topoJSONData, countryResults, mapType) => {
+  // resetting to blank map
+  d3.selectAll('.map-svg').remove();
 
   // convert topojson to geojson
   const countries = feature(topoJSONData, topoJSONData.objects.countries);
@@ -18,7 +18,14 @@ const drawWorldMap = (topoJSONData, countryResults) => {
   countryResults.forEach(d => countryNames[d.countryInfo._id] = d.country);
   // country cases
   const countryCases = {}
-  countryResults.forEach(d => countryCases[d.countryInfo._id] = d.cases);
+  if (mapType === 'ratio') {
+    countryResults.forEach(d => countryCases[d.countryInfo._id] = d.deaths / d.cases);
+  } else {
+      countryResults.forEach(d => countryCases[d.countryInfo._id] = d[`${mapType}`]);
+  }
+  // console.log(d3.extent(countryResults.map(d => d.deaths)))
+  // console.log(d3.extent(countryResults.map(d => d.deaths / d.cases)))
+
   // updated time
   const updatedTime = new Date(countryResults[1].updated).toLocaleString()
   // fotmatting the number
@@ -29,6 +36,10 @@ const drawWorldMap = (topoJSONData, countryResults) => {
   // country deaths formatted
   const countryDeathsFormatted = {}
   countryResults.forEach(d => countryDeathsFormatted[d.countryInfo._id] = formatComma(d.deaths));
+  // country deaths formatted
+  const countryRatioFormatted = {}
+  const ratioFormat = d3.format('.3f')
+  countryResults.forEach(d => countryRatioFormatted[d.countryInfo._id] = ratioFormat(d.deaths / d.cases));
 
   // setting up svg element, making size responsive
   const dimension = { width: 960, height: 420 };
@@ -39,13 +50,25 @@ const drawWorldMap = (topoJSONData, countryResults) => {
     .attr('preserveAspectRatio', 'xMinYMid meet')
     .attr('viewBox', `0 0 ${dimension.width} ${dimension.height}`);
 
-  // set the scale
-  const scale = [0, 100, 1000, 10000, 100000, 1000000, 10000000, 20000000, 30000000];
+  const scale = {
+    cases: [100, 1000, 10000, 100000, 1000000, 10000000, 20000000, 30000000],
+    deaths: [0, 100, 1000, 10000, 100000, 1000000, 5000000],
+    ratio: [0, 0.01, 0.02, 0.05, 0.1, 0.15, 0.2, 0.25]
+  }
+
+  const casesScheme = d3.schemeYlGnBu[9]
+  const deathsScheme = d3.schemeYlOrRd[8]
+  const ratioScheme = d3.schemePuRd[9]
+  const colorScheme = {
+    cases: casesScheme,
+    deaths: deathsScheme,
+    ratio: ratioScheme
+  }
 
   // color scale
   const colorScale = d3.scaleThreshold()
-    .domain(scale)
-    .range(d3.schemeBlues[9]);
+    .domain(scale[`${mapType}`])
+    .range(colorScheme[`${mapType}`]);
 
   // fix the missing COVID-19 data for some countries
   countryData.forEach(d => {
@@ -55,6 +78,7 @@ const drawWorldMap = (topoJSONData, countryResults) => {
     if(!countryCases[(d.id)]) {
       countryCasesFormatted[(d.id)] = 'No Info';
       countryDeathsFormatted[(d.id)] = 'No Info';
+      countryRatioFormatted[(d.id)] = 'No Info';
     }
   })
 
@@ -113,8 +137,8 @@ const drawWorldMap = (topoJSONData, countryResults) => {
     .attr('class', 'tooltip')
   tipBox.append('rect')
     .attr('class', 'tooltip-rect')
-    .attr('x', 30)
-    .attr('y', 250)
+    .attr('x', 25)
+    .attr('y', 220)
     .attr('height', 60)
     .attr('width', 215)
     .attr("rx", 10)
@@ -125,35 +149,44 @@ const drawWorldMap = (topoJSONData, countryResults) => {
     .style('opacity', 0.8)
   tipBox.append('text')
     .attr('class', 'tooltip-text1')
-    .attr('transform', 'translate(40,275)')
+    .attr('transform', 'translate(35,245)')
     .attr('fill', 'black')
     .text('Country COVID-19 Status')
   tipBox.append('text')
     .attr('class', 'tooltip-text2')
-    .attr('transform', 'translate(40,298)')
+    .attr('transform', 'translate(35,268)')
     .attr('fill', '#db0063')
     .text('- Hover over a country -')
   tipBox.append('text')
     .attr('class', 'tooltip-text3')
-    .attr('transform', 'translate(40,320)')
+    .attr('transform', 'translate(35,290)')
     .attr('fill', 'grey')
   tipBox.append('text')
     .attr('class', 'tooltip-text4')
-    .attr('transform', 'translate(40,340)')
+    .attr('transform', 'translate(35,310)')
+    .attr('fill', 'grey')
+  tipBox.append('text')
+    .attr('class', 'tooltip-text5')
+    .attr('transform', 'translate(35,330)')
     .attr('fill', 'grey')
 
   // create legend group
+  const legendTitle = {
+    cases: 'Cumulative Cases',
+    deaths: 'Cumulative Deaths',
+    ratio: 'Case-Fatality Ratio'
+  }
   const legendGroup = svg.append('g')
     .attr('class', 'legend-group')
   legendGroup.append('text')
-    .text('Cumulative Cases')
+    .text(legendTitle[`${mapType}`])
     .attr('class', 'legend-text')
     .attr('x', 20)
     .attr('y', 375)
   const legendColors = legendGroup.append('g')
     .attr('class', 'legend-colors')
   const legendColor = legendColors.selectAll('.legend-color')
-    .data(scale)
+    .data(scale[`${mapType}`])
   legendColor.enter()
     .append('rect')
     .attr('class', 'legend-color')
@@ -163,11 +196,15 @@ const drawWorldMap = (topoJSONData, countryResults) => {
     .attr('height', 15)
     .attr('fill', d => colorScale(d))
     .attr('opacity', 1)
-  const tickScale = ['0', '100', '1K', '10K', '100K', '1M', '10M', '20M', '30M']
+  const tickScale = {
+    cases: ['100', '1K', '10K', '100K', '1M', '10M', '20M', '30M'],
+    deaths: ['0', '100', '1K', '10K', '100K', '1M', '5M'],
+    ratio: [0, 0.01, 0.02, 0.05, 0.1, 0.15, 0.2, 0.25]
+  }
   const legendTicks = legendGroup.append('g')
   .attr('class', 'legend-ticks')
   const legendTick = legendTicks.selectAll('.legend-tick')
-    .data(tickScale)
+    .data(tickScale[`${mapType}`])
   legendTick.enter()
     .append('text')
     .attr('class', 'legend-tick')
@@ -222,13 +259,15 @@ const drawWorldMap = (topoJSONData, countryResults) => {
         .attr('stroke-width', 1)
         .style('opacity', 1)
       d3.select('.tooltip-rect')
-        .attr('height', 100)
+        .attr('height', 120)
       d3.select('.tooltip-text2')
         .text(countryNames[(d.id)])
       d3.select('.tooltip-text3')
         .text(`- Cases: ${countryCasesFormatted[(d.id)]}`)
       d3.select('.tooltip-text4')
         .text(`- Deaths: ${countryDeathsFormatted[(d.id)]}`)
+      d3.select('.tooltip-text5')
+        .text(`- Case-Fatality Ratio: ${countryRatioFormatted[(d.id)]}`)
     })
     .on('mouseout', (event, d) => {
       d3.selectAll('.map-country')
@@ -243,6 +282,8 @@ const drawWorldMap = (topoJSONData, countryResults) => {
       d3.select('.tooltip-text3')
         .text('')
       d3.select('.tooltip-text4')
+        .text('')
+      d3.select('.tooltip-text5')
         .text('')
     });
 
