@@ -3,6 +3,7 @@ import RenderWorldMap from './RenderWorldMap';
 
 const mapTopojsonAPI = 'https://unpkg.com/world-atlas@2.0.2/countries-50m.json';
 const covidCountryDataAPI = 'https://disease.sh/v3/covid-19/countries?yesterday=false&twoDaysAgo=false&allowNull=true';
+// API DOC: https://corona.lmao.ninja/docs/
 
 const WorldMap = () => {
   const [mapTopojson, setMapTopojson] = useState(null);
