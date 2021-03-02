@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import RenderWorldMap from './RenderWorldMap';
+import DrawWorldMap from './DrawWorldMap';
 
 const mapTopojsonAPI = 'https://unpkg.com/world-atlas@2.0.2/countries-50m.json';
 const covidCountryDataAPI = 'https://disease.sh/v3/covid-19/countries?yesterday=false&twoDaysAgo=false&allowNull=true';
@@ -29,20 +29,25 @@ const WorldMap = () => {
   }
   
   return (
-    <div>
-      <button 
-      onClick={e => setMapType(e.target.value)}
-      value='cases'
-      >Cumulative Cases</button>
-      <button 
+    <div className='worldmap-group'>
+      <DrawWorldMap topoJSONData={mapTopojson} countryResults={countryResults} mapType={mapType}/>
+      <div className='worldmap-buttons'>
+        <button 
+        className='waves-effect waves-light btn-small'
         onClick={e => setMapType(e.target.value)}
-        value='deaths'
-      >Cumulative Deaths</button>
-      <button 
-        onClick={e => setMapType(e.target.value)}
-        value='ratio'
-      >Case-Fatality Ratio</button>
-      <RenderWorldMap topoJSONData={mapTopojson} countryResults={countryResults} mapType={mapType}/>
+        value='cases'
+        >Cumulative Cases</button>
+        <button 
+          className='waves-effect waves-light btn-small'
+          onClick={e => setMapType(e.target.value)}
+          value='deaths'
+        >Cumulative Deaths</button>
+        <button 
+          className='waves-effect waves-light btn-small'
+          onClick={e => setMapType(e.target.value)}
+          value='ratio'
+        >Case-Fatality Ratio</button>
+      </div>
     </div>
   );
 };
