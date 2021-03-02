@@ -3,9 +3,9 @@ import * as d3 from 'd3';
 import { geoPatterson } from 'd3-geo-projection';
 import { feature } from 'topojson';
 
-const DrawWorldMap = ({topoJSONData, countryResults, mapType}) => {
+const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
   // convert topojson to geojson
-  const countries = feature(topoJSONData, topoJSONData.objects.countries);
+  const countries = feature(mapTopojson, mapTopojson.objects.countries);
   // get the features property from geojson object
   let countryData = countries.features;
   // change countryData array's id from string to number to match the id type in countryCases
@@ -67,16 +67,16 @@ const DrawWorldMap = ({topoJSONData, countryResults, mapType}) => {
     ratio: [0, 1, 2, 5, 10, 15, 20, 25]
   }
 
-  const svgRef = useRef();
+  // set ref for d3 to get the DOM
+  const mapRef = useRef();
   useEffect(() => {
     // resetting to blank map
     d3.select('.map-svg').remove();
 
-    // setting up svg element, making size responsive
+    // set the dimension of the map
     const dimension = { width: 960, height: 420 };
-    
-    // append an svg element to the DOM
-    const svg = d3.select(svgRef.current)
+    // setting up svg element, making size responsive
+    const svg = d3.select(mapRef.current)
       .append('svg')
       .attr('class', 'map-svg')
       .attr('preserveAspectRatio', 'xMinYMid meet')
@@ -289,7 +289,7 @@ const DrawWorldMap = ({topoJSONData, countryResults, mapType}) => {
   }, [mapType])
 
   return (
-    <div className='worldmap' ref={svgRef}></div>
+    <div className='worldmap' ref={mapRef}></div>
   )
 }
 
