@@ -14,6 +14,12 @@ const DrawLineChart = ({ data }) => {
       deaths: deathNumberArray[i]
     })
   }
+
+  // set color of the line
+  const color = {
+    cases: '#587ffc',
+    deaths: '#ff6b6b'
+  }
   
   // set ref for d3 to get the DOM
   const linechartRef = useRef();
@@ -23,7 +29,7 @@ const DrawLineChart = ({ data }) => {
     d3.select('.linechart-svg').remove();
 
     // setting the dimension of the chart
-    const margin = { top: 20, right: 70, bottom: 50, left: 70 };
+    const margin = { top: 80, right: 60, bottom: 40, left: 60 };
     const graphWidth = 900 - margin.left - margin.right;
     const graphHeight = 500 - margin.top - margin.bottom;
 
@@ -51,11 +57,14 @@ const DrawLineChart = ({ data }) => {
 
     // create axes
     const xAxis = d3.axisBottom(scaleX)
-      .ticks(10);
-    const yAxis = d3.axisLeft(scaleY)
-      .ticks(10);
-    const yAxis2 = d3.axisRight(scaleY2)
-      .ticks(5);
+      .ticks(10)
+      .tickFormat(d3.timeFormat("%b %y"));
+      const yAxis = d3.axisLeft(scaleY)
+      .ticks(10)
+      .tickFormat(d3.format('.0s'));
+      const yAxis2 = d3.axisRight(scaleY2)
+      .ticks(5)
+      .tickFormat(d3.format('.0s'));
     // axes groups
     const xAxisGroup = graph.append('g')
       .attr('class', 'x-axis')
@@ -69,85 +78,158 @@ const DrawLineChart = ({ data }) => {
     xAxisGroup.call(xAxis);
     yAxisGroup.call(yAxis);
     yAxisGroup2.call(yAxis2);
+    // axis labels
+    graph.append('text')
+      .attr('class', 'axis-label')
+      .attr('text-anchor', 'end')
+      .attr('fill', color.cases)
+      .attr('x', -5)
+      .attr('y', -5)
+      .text('Cases')
+    graph.append('text')
+      .attr('class', 'axis-label')
+      .attr('text-anchor', 'start')
+      .attr('fill', color.deaths)
+      .attr('x', graphWidth + 5)
+      .attr('y', -5)
+      .text('Deaths')
 
-    // d3 line path generator
-    const line = d3.line()
-      .x(d => scaleX(new Date(d.date)))
-      .y(d => scaleY(d.cases));
+    // chart title
+    graph.append('text')
+      .attr('class', 'line-title')
+      .attr('text-anchor', 'middle')
+      .attr('x', graphWidth / 2)
+      .attr('y', -45)
+      .text('Cumulative Cases / Deaths')
+    graph.append('text')
+      .attr('class', 'ask-hover')
+      .attr('fill', '#02e0e0')
+      .attr('text-anchor', 'middle')
+      .attr('x', graphWidth / 2)
+      .attr('y', -10)
+      .style('opacity', 1)
+      .text('- hover to check figures -')
 
-      // line path element
-    const path = graph.append('path')
-    path.data([dataFormatted])
-      .attr('fill', 'none')
-      .attr('stroke', 'blue')
-      .attr('stroke-width', 3)
-      .attr('d', line)
-
+    // path animation
+    function tweenDash() {
+      const l = this.getTotalLength(),
+        i = d3.interpolateString(`0,${l}`, `${l},${l}`);
+      return function(t) { return i(t) };
+    }
+    
+    // deaths path
     // d3 line path generator
     const line2 = d3.line()
     .x(d => scaleX(new Date(d.date)))
     .y(d => scaleY2(d.deaths));
-      
     // line path element
     const path2 = graph.append('path')
     path2.data([dataFormatted])
       .attr('fill', 'none')
-      .attr('stroke', 'red')
+      .attr('stroke', color.deaths)
       .attr('stroke-width', 3)
       .attr('d', line2)
+      .transition()
+        .duration(3500)
+        .attrTween("stroke-dasharray", tweenDash)
+
+    // cases path
+    // d3 line path generator
+    const line = d3.line()
+      .x(d => scaleX(new Date(d.date)))
+      .y(d => scaleY(d.cases));
+    // line path element
+    const path = graph.append('path')
+    path.data([dataFormatted])
+      .attr('fill', 'none')
+      .attr('stroke', color.cases)
+      .attr('stroke-width', 3)
+      .attr('d', line)
+      .transition()
+        .duration(3500)
+        .attrTween("stroke-dasharray", tweenDash)
+
+    // create hover lines
+    const lineDate = graph.append('line')
+      .attr('stroke', 'darkgrey')
+      .attr('stroke-width', 2)
+      .attr('stroke-dasharray', 4)
+    const lineCase = graph.append('line')
+      .attr('stroke', color.cases)
+      .attr('stroke-width', 2)
+      .attr('stroke-dasharray', 4)
+    const lineDeath =graph.append('line')
+      .attr('stroke', color.deaths)
+      .attr('stroke-width', 2)
+      .attr('stroke-dasharray', 4)
+    // create hover circles
+    const circleCase = graph.append('circle')
+      .attr('r', 5)
+      .attr('fill', color.cases)
+    const circleDeath = graph.append('circle')
+      .attr('r', 5)
+      .attr('fill', color.deaths)
+    // create tooltips
+    const tooltipDate = graph.append('text')
+      .attr('class', 'tooltip-date')
+      .attr('text-anchor', 'middle')
+      .attr('fill', 'darkgrey')
+    const tooltipCase = graph.append('text')
+      .attr('class', 'tooltip-case')
+      .attr('fill', color.cases)
+    const tooltipDeath = graph.append('text')
+      .attr('class', 'tooltip-death')
+      .attr('text-anchor', 'end')
+      .attr('fill', color.deaths)
 
     // hover effect
     const bisect = d3.bisector(d => new Date(d.date)).right;
     graph.append('rect')
-      .attr('width', graphWidth)
+      .attr('width', graphWidth - 1)
       .attr('height', graphHeight)
       .attr('fill', 'none')
       .attr('pointer-events', 'all')
       .on('touchmove mousemove', (event) => {
+        graph.select('.ask-hover')
+          .style('opacity', 0)
         const x = d3.pointer(event)[0]
         const hoveredDate = scaleX.invert(x)
         const i = bisect(dataFormatted, hoveredDate);
-        graph.selectAll('circle').remove();
-        graph
-          .append('circle')
-          .attr('r', 5)
-          .attr('cy', scaleY(dataFormatted[i].cases))
-          .attr('cx', scaleX(new Date(dataFormatted[i].date)))
-          .attr('fill', 'blue')
-        graph
-          .append('circle')
-          .attr('r', 5)
-          .attr('cy', scaleY2(dataFormatted[i].deaths))
-          .attr('cx', scaleX(new Date(dataFormatted[i].date)))
-          .attr('fill', 'red')
-        graph.selectAll('line').remove();
-        graph
-          .append('line')
-          .attr('stroke', '#aaa')
-          .attr('stroke-width', 2)
-          .attr('stroke-dasharray', 4)
+        lineDate
           .attr('x1', scaleX(new Date(dataFormatted[i].date)))
           .attr('x2', scaleX(new Date(dataFormatted[i].date)))
           .attr('y1', graphHeight)
           .attr('y2', 0);
-        graph
-          .append('line')
-          .attr('stroke', 'blue')
-          .attr('stroke-width', 2)
-          .attr('stroke-dasharray', 4)
+        lineCase
           .attr('x1', 0)
           .attr('x2', scaleX(new Date(dataFormatted[i].date)))
           .attr('y1', scaleY(dataFormatted[i].cases))
           .attr('y2', scaleY(dataFormatted[i].cases));
-        graph
-          .append('line')
-          .attr('stroke', 'red')
-          .attr('stroke-width', 2)
-          .attr('stroke-dasharray', 4)
+        lineDeath
           .attr('x1', scaleX(new Date(dataFormatted[i].date)))
           .attr('x2', graphWidth)
           .attr('y1', scaleY2(dataFormatted[i].deaths))
           .attr('y2', scaleY2(dataFormatted[i].deaths));
+        circleCase
+          .attr('cy', scaleY(dataFormatted[i].cases))
+          .attr('cx', scaleX(new Date(dataFormatted[i].date)))
+        circleDeath
+          .attr('cy', scaleY2(dataFormatted[i].deaths))
+          .attr('cx', scaleX(new Date(dataFormatted[i].date)))
+        // define date format
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        tooltipDate
+          .attr('transform', `translate(${scaleX(new Date(dataFormatted[i].date))}, -18)`)
+          .text(new Date(dataFormatted[i].date).toLocaleDateString(undefined, options))
+          .text(d3.timeFormat("%d %b %y")(new Date(dataFormatted[i].date)))
+        // define number format
+        const formatComma = d3.format(',')
+        tooltipCase
+          .attr('transform', `translate(5, ${scaleY(dataFormatted[i].cases) - 5})`)
+          .text(formatComma(dataFormatted[i].cases))
+        tooltipDeath
+          .attr('transform', `translate(${graphWidth -5}, ${scaleY2(dataFormatted[i].deaths) - 5})`)
+          .text(formatComma(dataFormatted[i].deaths))
       })
 
   }, [])

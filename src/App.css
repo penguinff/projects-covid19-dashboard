@@ -57,3 +57,37 @@
   user-select: none;
   font-family: 'Roboto Condensed', sans-serif;
 }
+
+.tooltip-date,
+.tooltip-case,
+.tooltip-death {
+  font-size: 18px;
+  user-select: none;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: bold;
+}
+
+.axis-label {
+  user-select: none;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: bold;
+}
+
+.linechart-svg {
+  background-color: rgb(247, 247, 247);
+  border-radius: 10px;
+}
+
+.line-title {
+  font-size: 25px;
+  user-select: none;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: bold;
+  text-decoration: underline;
+}
+.ask-hover {
+  font-size: 25px;
+  user-select: none;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: bold;
+}
