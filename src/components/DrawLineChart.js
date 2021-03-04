@@ -14,7 +14,6 @@ const DrawLineChart = ({ data }) => {
       deaths: deathNumberArray[i]
     })
   }
-  console.log(dataFormatted)
   
   // set ref for d3 to get the DOM
   const linechartRef = useRef();
@@ -24,7 +23,7 @@ const DrawLineChart = ({ data }) => {
     d3.select('.linechart-svg').remove();
 
     // setting the dimension of the chart
-    const margin = { top: 20, right: 70, bottom: 30, left: 70 };
+    const margin = { top: 20, right: 70, bottom: 50, left: 70 };
     const graphWidth = 900 - margin.left - margin.right;
     const graphHeight = 500 - margin.top - margin.bottom;
 
@@ -81,7 +80,7 @@ const DrawLineChart = ({ data }) => {
     path.data([dataFormatted])
       .attr('fill', 'none')
       .attr('stroke', 'blue')
-      .attr('stroke-width', 2)
+      .attr('stroke-width', 3)
       .attr('d', line)
 
     // d3 line path generator
@@ -94,133 +93,62 @@ const DrawLineChart = ({ data }) => {
     path2.data([dataFormatted])
       .attr('fill', 'none')
       .attr('stroke', 'red')
-      .attr('stroke-width', 2)
+      .attr('stroke-width', 3)
       .attr('d', line2)
 
-    // set lines & circles for hover effect
-    const hoverGroup = graph.append('g')
-      .attr('class', 'hover-effects');
-    // hoverGroup.append('path')
-    //   .attr('class', 'hover-line')
-    //   .attr('stroke', 'darkgrey')
-    //   .attr('stroke-width', 2)
-    //   .attr('stroke-dasharray', 4)
-    //   .style('opacity', 1);
-    const dottedLines = hoverGroup.append('g')
-      .attr('class', 'lines')
-      .style('opacity', 0);
-    const xDottedLine = dottedLines.append('line')
-      .attr('stroke', '#aaa')
-      .attr('stroke-width', 1)
-      .attr('stroke-dasharray', 4);
-    const yDottedLine = dottedLines.append('line')
-      .attr('stroke', '#aaa')
-      .attr('stroke-width', 1)
-      .attr('stroke-dasharray', 4);
-    // const circles = hoverGroup.append('g')
-    //   .attr('class', 'circles')
-    //   .style('opacity', 0);
-    // const casesCircles = circles.append('circle')
-    //   .attr('class', 'cases-circle')
-    //   .attr('r', 3)
-    //   .attr('stroke', 'blue')
-    //   .attr('stroke-width', 1)
-    //   .attr('fill', 'none');
-    // const deathsCircles = circles.append('circle')
-    //   .attr('class', 'deaths-circle')
-    //   .attr('r', 3)
-    //   .attr('stroke', 'red')
-    //   .attr('stroke-width', 1)
-    //   .attr('fill', 'none');
-    const hoverCircles = hoverGroup.selectAll('.hover-circles')
-      .data(dataFormatted)
-      .enter()
-      .append('g')
-      .attr('class', 'hover-circles')
-    hoverCircles.append('circle')
-      .attr('class', 'cases-circle')
-      .attr('r', 5)
-      .attr('stroke', 'blue')
-      .attr('stroke-width', 1)
-      .attr('fill', 'none')
-      .style('opacity', 0)
-      .attr('cx', d => scaleX(new Date(d.date)))
-      .attr('cy', d => scaleY(d.cases))
-    hoverCircles.append('circle')
-      .attr('class', 'deaths-circle')
-      .attr('r', 5)
-      .attr('stroke', 'red')
-      .attr('stroke-width', 1)
-      .attr('fill', 'none')
-      .style('opacity', 0)
-      .attr('cx', d => scaleX(new Date(d.date)))
-      .attr('cy', d => scaleY2(d.deaths))
-    
     // hover effect
-    // hoverGroup.selectAll('circle')
-    //   .on('mouseover', (event, d) => {
-    //     d3.select(event.currentTarget)
-    //       .style('opacity', 1)
-    //     xDottedLine
-    //       .attr('x1', scaleX(new Date(d.date)))
-    //       .attr('x2', scaleX(new Date(d.date)))
-    //       .attr('y1', graphHeight)
-    //       .attr('y2', scaleY(d.cases));
-    //     yDottedLine
-    //       .attr('x1', 0)
-    //       .attr('x2', scaleX(new Date(d.date)))
-    //       .attr('y1', scaleY(d.cases))
-    //       .attr('y2', scaleY(d.cases));
-    //     dottedLines.style('opacity', 1);
-    //   })
-    //   .on('mouseleave', (event, d) => {
-    //     d3.select(event.currentTarget)
-    //       .style('opacity', 0)
-    //     dottedLines.style('opacity', 0)
-    //   })
-    hoverGroup.selectAll('.cases-circle')
-    .on('mouseover', (event, d) => {
-      d3.select(event.currentTarget)
-        .style('opacity', 1)
-      xDottedLine
-        .attr('x1', scaleX(new Date(d.date)))
-        .attr('x2', scaleX(new Date(d.date)))
-        .attr('y1', graphHeight)
-        .attr('y2', scaleY(d.cases));
-      yDottedLine
-        .attr('x1', 0)
-        .attr('x2', scaleX(new Date(d.date)))
-        .attr('y1', scaleY(d.cases))
-        .attr('y2', scaleY(d.cases));
-      dottedLines.style('opacity', 1);
-    })
-    .on('mouseleave', (event, d) => {
-      d3.select(event.currentTarget)
-        .style('opacity', 0)
-      dottedLines.style('opacity', 0)
-    })
-    hoverGroup.selectAll('.deaths-circle')
-    .on('mouseover', (event, d) => {
-      d3.select(event.currentTarget)
-        .style('opacity', 1)
-      xDottedLine
-        .attr('x1', scaleX(new Date(d.date)))
-        .attr('x2', scaleX(new Date(d.date)))
-        .attr('y1', graphHeight)
-        .attr('y2', scaleY2(d.deaths));
-      yDottedLine
-        .attr('x1', graphWidth)
-        .attr('x2', scaleX(new Date(d.date)))
-        .attr('y1', scaleY2(d.deaths))
-        .attr('y2', scaleY2(d.deaths));
-      dottedLines.style('opacity', 1);
-    })
-    .on('mouseleave', (event, d) => {
-      d3.select(event.currentTarget)
-        .style('opacity', 0)
-      dottedLines.style('opacity', 0)
-    })
-
+    const bisect = d3.bisector(d => new Date(d.date)).right;
+    graph.append('rect')
+      .attr('width', graphWidth)
+      .attr('height', graphHeight)
+      .attr('fill', 'none')
+      .attr('pointer-events', 'all')
+      .on('touchmove mousemove', (event) => {
+        const x = d3.pointer(event)[0]
+        const hoveredDate = scaleX.invert(x)
+        const i = bisect(dataFormatted, hoveredDate);
+        graph.selectAll('circle').remove();
+        graph
+          .append('circle')
+          .attr('r', 5)
+          .attr('cy', scaleY(dataFormatted[i].cases))
+          .attr('cx', scaleX(new Date(dataFormatted[i].date)))
+          .attr('fill', 'blue')
+        graph
+          .append('circle')
+          .attr('r', 5)
+          .attr('cy', scaleY2(dataFormatted[i].deaths))
+          .attr('cx', scaleX(new Date(dataFormatted[i].date)))
+          .attr('fill', 'red')
+        graph.selectAll('line').remove();
+        graph
+          .append('line')
+          .attr('stroke', '#aaa')
+          .attr('stroke-width', 2)
+          .attr('stroke-dasharray', 4)
+          .attr('x1', scaleX(new Date(dataFormatted[i].date)))
+          .attr('x2', scaleX(new Date(dataFormatted[i].date)))
+          .attr('y1', graphHeight)
+          .attr('y2', 0);
+        graph
+          .append('line')
+          .attr('stroke', 'blue')
+          .attr('stroke-width', 2)
+          .attr('stroke-dasharray', 4)
+          .attr('x1', 0)
+          .attr('x2', scaleX(new Date(dataFormatted[i].date)))
+          .attr('y1', scaleY(dataFormatted[i].cases))
+          .attr('y2', scaleY(dataFormatted[i].cases));
+        graph
+          .append('line')
+          .attr('stroke', 'red')
+          .attr('stroke-width', 2)
+          .attr('stroke-dasharray', 4)
+          .attr('x1', scaleX(new Date(dataFormatted[i].date)))
+          .attr('x2', graphWidth)
+          .attr('y1', scaleY2(dataFormatted[i].deaths))
+          .attr('y2', scaleY2(dataFormatted[i].deaths));
+      })
 
   }, [])
 

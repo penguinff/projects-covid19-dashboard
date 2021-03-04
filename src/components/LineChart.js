@@ -13,8 +13,6 @@ const LineChart = () => {
   
   if (!totalData) {
     return <pre>Loading chart...</pre>;
-  } else {
-    console.log(totalData)
   }
 
   return (

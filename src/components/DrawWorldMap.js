@@ -248,7 +248,7 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
 
     // add mouse hover events
     graph.selectAll('.map-country')
-      .on('mouseover', function(event, d) {
+      .on('mouseover', (event, d) => {
         d3.selectAll('.map-country')
           .transition().duration(200)
           .attr('stroke', 'white')

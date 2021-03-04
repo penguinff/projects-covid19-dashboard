@@ -49,3 +49,11 @@
   width: 90%;
   height: auto;
 }
+
+.x-axis,
+.y-axis,
+.y-axis2 {
+  font-size: 12px;
+  user-select: none;
+  font-family: 'Roboto Condensed', sans-serif;
+}
