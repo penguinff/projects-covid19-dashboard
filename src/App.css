@@ -40,9 +40,12 @@
   font-family: 'Roboto Condensed', sans-serif;
 }
 
-.linechart-svg {
+.linechart-svg,
+.barchart-svg {
   margin: auto;
   width: 90%;
+  background-color: rgb(247, 247, 247);
+  border-radius: 10px;
 }
 
 .temp-pic {
@@ -73,12 +76,8 @@
   font-weight: bold;
 }
 
-.linechart-svg {
-  background-color: rgb(247, 247, 247);
-  border-radius: 10px;
-}
-
-.line-title {
+.line-title,
+.bar-title {
   font-size: 25px;
   user-select: none;
   font-family: 'Roboto Condensed', sans-serif;
@@ -90,4 +89,17 @@
   user-select: none;
   font-family: 'Roboto Condensed', sans-serif;
   font-weight: bold;
+}
+
+.d3-tip {
+  padding: 3px 5px;
+  border-radius: 5px;
+}
+
+.tip-date,
+.tip-figure {
+  user-select: none;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: bold;
+  text-align: center;
 }

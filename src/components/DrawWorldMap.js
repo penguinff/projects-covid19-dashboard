@@ -44,7 +44,7 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
     }
   })
   // set updated time
-  const updatedTime = new Date(countryResults[1].updated).toLocaleString()
+  const updatedTime = d3.timeFormat("%d %b %Y, %H:%M %p")(new Date(countryResults[1].updated))
   // set scales for maps
   const scale = {
     cases: [100, 1000, 10000, 100000, 1000000, 10000000, 20000000, 30000000],

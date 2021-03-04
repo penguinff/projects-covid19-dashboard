@@ -64,7 +64,7 @@ const DrawLineChart = ({ data }) => {
       .tickFormat(d3.format('.0s'));
       const yAxis2 = d3.axisRight(scaleY2)
       .ticks(5)
-      .tickFormat(d3.format('.0s'));
+      .tickFormat(d3.format('.2~s'));
     // axes groups
     const xAxisGroup = graph.append('g')
       .attr('class', 'x-axis')
@@ -100,7 +100,7 @@ const DrawLineChart = ({ data }) => {
       .attr('text-anchor', 'middle')
       .attr('x', graphWidth / 2)
       .attr('y', -45)
-      .text('Cumulative Cases / Deaths')
+      .text('Cumulative Global Cases / Deaths')
     graph.append('text')
       .attr('class', 'ask-hover')
       .attr('fill', '#02e0e0')
@@ -120,8 +120,8 @@ const DrawLineChart = ({ data }) => {
     // deaths path
     // d3 line path generator
     const line2 = d3.line()
-    .x(d => scaleX(new Date(d.date)))
-    .y(d => scaleY2(d.deaths));
+      .x(d => scaleX(new Date(d.date)))
+      .y(d => scaleY2(d.deaths));
     // line path element
     const path2 = graph.append('path')
     path2.data([dataFormatted])
@@ -217,11 +217,9 @@ const DrawLineChart = ({ data }) => {
           .attr('cy', scaleY2(dataFormatted[i].deaths))
           .attr('cx', scaleX(new Date(dataFormatted[i].date)))
         // define date format
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
         tooltipDate
           .attr('transform', `translate(${scaleX(new Date(dataFormatted[i].date))}, -18)`)
-          .text(new Date(dataFormatted[i].date).toLocaleDateString(undefined, options))
-          .text(d3.timeFormat("%d %b %y")(new Date(dataFormatted[i].date)))
+          .text(d3.timeFormat('%d %b %y')(new Date(dataFormatted[i].date)))
         // define number format
         const formatComma = d3.format(',')
         tooltipCase
