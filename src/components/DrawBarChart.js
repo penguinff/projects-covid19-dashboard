@@ -15,7 +15,6 @@ const DrawBarChart = ({ data, type }) => {
       deaths: deathNumberArray[i] - deathNumberArray[i-1]
     })
   }
-  console.log(dataFormatted)
 
   // set color of the line
   const color = {
@@ -128,7 +127,7 @@ const DrawBarChart = ({ data, type }) => {
       .attr('fill', color[`${type}`])
       .attr('x', (d, i) => i * barWidth)
       .attr('y', graphHeight)
-      .transition().duration(700)
+      .transition().duration(1000)
         .attr('height', d => graphHeight - scaleY(d[`${type}`]))
         .attr('y', d => scaleY(d[`${type}`]))
 

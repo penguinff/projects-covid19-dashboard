@@ -74,7 +74,7 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
     d3.select('.map-svg').remove();
 
     // set the dimension of the map
-    const dimension = { width: 960, height: 420 };
+    const dimension = { width: 960, height: 430 };
     // setting up svg element, making size responsive
     const svg = d3.select(mapRef.current)
       .append('svg')
@@ -187,7 +187,7 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
       .text(legendTitle[`${mapType}`])
       .attr('class', 'legend-text')
       .attr('x', 20)
-      .attr('y', 375)
+      .attr('y', 385)
     const legendColors = legendGroup.append('g')
       .attr('class', 'legend-colors')
     const legendColor = legendColors.selectAll('.legend-color')
@@ -196,7 +196,7 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
       .append('rect')
       .attr('class', 'legend-color')
       .attr('x', (d, i) => 20 + i * 35)
-      .attr('y', 380)
+      .attr('y', 390)
       .attr('width', 35)
       .attr('height', 15)
       .attr('fill', d => colorScale(d))
@@ -209,14 +209,14 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
       .append('text')
       .attr('class', 'legend-tick')
       .attr('x', (d, i) => 20 + i * 35)
-      .attr('y', 405)
+      .attr('y', 415)
       .text(d => d)
       .attr('opacity', 1)
 
     // create a group to manage udpated time
     svg.append('text')
       .attr('class', 'updated-time') 
-      .attr('transform', 'translate(750,408)')
+      .attr('transform', 'translate(755,415)')
       .attr('fill', 'grey')
       .text(`Last Updated at: ${updatedTime}`)
       

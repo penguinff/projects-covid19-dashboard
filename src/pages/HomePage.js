@@ -1,13 +1,19 @@
 import InfoCards from '../components/InfoCards';
-import WorldMap from '../components/WorldMap';
-import Charts from '../components/Charts';
+import MapChartGroup from '../components/MapChartGroup';
+import NewsCards from '../components/NewsCards';
 
 const HomePage = () => {
   return (
-    <div>
-      <InfoCards />
-      <WorldMap />
-      <Charts />
+    <div className='section row'>
+      <div className='col s12 m12 l2'>
+        <InfoCards />
+      </div>
+      <div className='col s12 m12 l8'>
+        <MapChartGroup />
+      </div>
+      <div className='col s12 m12 l2'>
+        <NewsCards />
+      </div>
     </div>
   );
 }

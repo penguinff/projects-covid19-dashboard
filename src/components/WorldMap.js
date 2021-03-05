@@ -29,7 +29,7 @@ const WorldMap = () => {
   }
   
   return (
-    <div className='worldmap-group'>
+    <div className='section worldmap-group'>
       <DrawWorldMap mapTopojson={mapTopojson} countryResults={countryResults} mapType={mapType}/>
       <div className='worldmap-buttons'>
         <button 

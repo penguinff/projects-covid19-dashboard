@@ -2,16 +2,86 @@
 
 .App {
   text-align: center;
+  background-color: rgb(231, 231, 231);
 }
 
 .info-cards {
   margin: auto;
-  width: 80%;
+  /* max-width: 270px; */
+  height: 90vh;
+  overflow-y: scroll;
+  border: solid 1px;
+  border-color: rgb(201, 201, 201);
+  border-radius: 10px;
+  background-color: rgb(251, 251, 251);
+}
+
+.info-card {
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 18px;
+  text-align: center;
+  padding: 2px;
+  border-bottom: solid 0.5px;
+  border-color: rgb(201, 201, 201);
+  display: flex;
+  align-items: center;
+  background-color: rgb(251, 251, 251);
+  display: flex;
+  justify-content: center;
+}
+
+.info-card-summary {
+  text-transform: uppercase;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 20px;
+  text-align: center;
+  border-bottom: solid 0.5px;
+  border-color: rgb(201, 201, 201);
+  background-color: rgb(251, 251, 251);
+  font-weight: 600;
+  color: rgb(22, 130, 163);
+}
+
+.info-card-figure {
+  padding: 3px;
+  width: 100px;
+  text-align: center;
+  font-weight: 600;
+}
+.info-card-flag {
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.info-card-flag-img {
+  height: 20px;
+  width: auto;
+  border: solid 0.5px;
+  border-color: grey;
+}
+.info-card-country {
+  width: 100px;
+}
+
+/* .worldmap-group {
+  margin: auto;
+  border: solid 1px;
+  border-color: rgb(201, 201, 201);
+  border-radius: 10px;
+  background-color: rgb(251, 251, 251);
+} */
+
+.map-chart-group {
+  height: 90vh;
+  width: auto;
+  /* overflow-y: scroll;
+  overflow-x: hidden; */
 }
 
 .map-svg {
   margin: auto;
-  width: 85%;
+  /* max-width: 95%; */
   background-color: rgb(247, 247, 247);
   border-radius: 10px;
 }
@@ -43,7 +113,7 @@
 .linechart-svg,
 .barchart-svg {
   margin: auto;
-  width: 90%;
+  /* max-width: 95%; */
   background-color: rgb(251, 251, 251);
   border-radius: 10px;
 }
@@ -108,4 +178,22 @@
   stroke: lightgray;
   stroke-opacity: 0.15;
   shape-rendering: crispEdges;
+}
+
+.news-cards {
+  margin: auto;
+  /* max-width: 270px; */
+  height: 90vh;
+  overflow-y: scroll;
+  border: solid 1px;
+  border-color: rgb(201, 201, 201);
+  border-radius: 10px;
+  background-color: rgb(251, 251, 251);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.news-card {
+  width: 95%;
 }

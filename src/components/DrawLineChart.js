@@ -130,7 +130,7 @@ const DrawLineChart = ({ data }) => {
       .attr('stroke-width', 3)
       .attr('d', line2)
       .transition()
-        .duration(3500)
+        .duration(2500)
         .attrTween("stroke-dasharray", tweenDash)
 
     // cases path
@@ -146,7 +146,7 @@ const DrawLineChart = ({ data }) => {
       .attr('stroke-width', 3)
       .attr('d', line)
       .transition()
-        .duration(3500)
+        .duration(2500)
         .attrTween("stroke-dasharray", tweenDash)
 
     // create hover lines
