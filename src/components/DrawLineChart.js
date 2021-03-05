@@ -17,8 +17,8 @@ const DrawLineChart = ({ data }) => {
 
   // set color of the line
   const color = {
-    cases: '#587ffc',
-    deaths: '#ff6b6b'
+    cases: '#6895e0',
+    deaths: '#fb6779'
   }
   
   // set ref for d3 to get the DOM
@@ -49,10 +49,10 @@ const DrawLineChart = ({ data }) => {
       .domain(d3.extent(dataFormatted, d => new Date(d.date)))
       .range([0, graphWidth]);
     const scaleY = d3.scaleLinear()
-      .domain(d3.extent(dataFormatted, d => d.cases))
+      .domain([0, d3.max(dataFormatted, d => d.cases)])
       .range([graphHeight, 0]);
     const scaleY2 = d3.scaleLinear()
-      .domain(d3.extent(dataFormatted, d => d.deaths))
+      .domain([0, d3.max(dataFormatted, d => d.deaths)])
       .range([graphHeight, 0]);
 
     // create axes
@@ -61,7 +61,7 @@ const DrawLineChart = ({ data }) => {
       .tickFormat(d3.timeFormat("%b %y"));
       const yAxis = d3.axisLeft(scaleY)
       .ticks(10)
-      .tickFormat(d3.format('.0s'));
+      .tickFormat(d3.format('.2~s'));
       const yAxis2 = d3.axisRight(scaleY2)
       .ticks(5)
       .tickFormat(d3.format('.2~s'));

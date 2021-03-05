@@ -19,8 +19,8 @@ const DrawBarChart = ({ data, type }) => {
 
   // set color of the line
   const color = {
-    cases: '#587ffc',
-    deaths: '#ff6b6b'
+    cases: '#6895e0',
+    deaths: '#fb6779'
   }
   // set axis labels
   const label = {
@@ -61,7 +61,7 @@ const DrawBarChart = ({ data, type }) => {
       .domain(d3.extent(dataFormatted, d => new Date(d.date)))
       .range([0, graphWidth]);
     const scaleY = d3.scaleLinear()
-      .domain(d3.extent(dataFormatted, d => d[`${type}`]))
+      .domain([0, d3.max(dataFormatted, d => d[`${type}`])])
       .range([graphHeight, 0]);
 
     // create axes
@@ -91,6 +91,13 @@ const DrawBarChart = ({ data, type }) => {
       .attr('x', -5)
       .attr('y', -5)
       .text(label[`${type}`])
+
+    // chart grid
+    graph.append('g')
+      .attr('class', 'grid')
+      .call(d3.axisLeft(scaleY)
+        .tickSize(-graphWidth)
+        .tickFormat(''))
 
     // chart title
     graph.append('text')
