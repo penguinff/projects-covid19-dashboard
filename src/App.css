@@ -3,12 +3,18 @@
 .App {
   text-align: center;
   background-color: rgb(231, 231, 231);
+  /* background-color: rgb(78, 78, 78); */
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+.homepage {
+  margin: auto;
 }
 
 .info-cards {
   margin: auto;
   /* max-width: 270px; */
-  height: 90vh;
+  height: 100vh;
   overflow-y: scroll;
   border: solid 1px;
   border-color: rgb(201, 201, 201);
@@ -39,7 +45,6 @@
   border-color: rgb(201, 201, 201);
   background-color: rgb(251, 251, 251);
   font-weight: 600;
-  color: rgb(22, 130, 163);
 }
 
 .info-card-figure {
@@ -69,20 +74,51 @@
   border: solid 1px;
   border-color: rgb(201, 201, 201);
   border-radius: 10px;
-  background-color: rgb(251, 251, 251);
+  background-color: rgb(247, 247, 247);
 } */
 
-.map-chart-group {
-  height: 90vh;
-  width: auto;
-  /* overflow-y: scroll;
-  overflow-x: hidden; */
+.map-change {
+  display: flex;
+  justify-content: center;
+  font-size: 20px;
+  user-select: none;
+}
+
+.map-title {
+  width: 250px;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.arrow {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: transparent;
+  color: rgb(49, 143, 250);
+  transition: 0.3s;
+}
+
+.material-icons {
+  font-size: 30px;
+}
+
+.arrow:hover {
+  color: rgb(255, 208, 0);
+}
+
+.arrow:focus {
+  background-color: transparent;
 }
 
 .map-svg {
   margin: auto;
   /* max-width: 95%; */
   background-color: rgb(247, 247, 247);
+  /* background-color: rgb(200, 200, 200); */
   border-radius: 10px;
 }
 
@@ -168,6 +204,7 @@
 
 .tip-date,
 .tip-figure {
+  font-size: 12px;
   user-select: none;
   font-family: 'Roboto Condensed', sans-serif;
   font-weight: bold;
@@ -183,7 +220,7 @@
 .news-cards {
   margin: auto;
   /* max-width: 270px; */
-  height: 90vh;
+  height: 100vh;
   overflow-y: scroll;
   border: solid 1px;
   border-color: rgb(201, 201, 201);
@@ -196,4 +233,29 @@
 
 .news-card {
   width: 95%;
+  text-align: left;
+}
+
+.news-card-summary {
+  font-size: 25px;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.news-title {
+  font-size: 16px;
+  text-decoration: underline;
+}
+
+.news-description {
+  /* text-overflow: ellipsis;
+  white-space: nowrap; */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.s-text {
+  font-size: 12px;
 }

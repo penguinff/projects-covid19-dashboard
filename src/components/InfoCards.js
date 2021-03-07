@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import InfoCard from './InfoCard';
+import Spinner from './Spinner';
 
 const InfoCards = () => {
   const [countryData, setCountryData] = useState(null);
@@ -24,30 +25,30 @@ const InfoCards = () => {
   }, [dataType]);
 
   if (!countryData || !globalData) {
-    return <pre>Loading data...</pre>;
+    return <Spinner />;
   }
   
   return (
     <div className='section info-cards'>
-      <div className='barchart-buttons'>
+      <div className='infocard-buttons'>
           <button 
-            className='waves-effect waves-light btn-small'
+            className='blue-grey waves-effect waves-light btn-small'
             onClick={e => setDataType(e.target.value)}
             value='cases'
           >Cases</button>
           <button 
-            className='waves-effect waves-light btn-small'
+            className='blue-grey waves-effect waves-light btn-small'
             onClick={e => setDataType(e.target.value)}
             value='deaths'
           >Deaths</button>
           <button 
-            className='waves-effect waves-light btn-small'
+            className='blue-grey waves-effect waves-light btn-small'
             onClick={e => setDataType(e.target.value)}
             value='recovered'
           >Recovered</button>
         </div>
         <div className='card'>
-          <div className='info-card-summary'>Global {dataType} <br/>{globalData[dataType]}</div>
+          <div className='info-card-summary pink-text'>Global {dataType} <br/>{globalData[dataType].toLocaleString()}</div>
           {countryData.map(item => <InfoCard key={item.country} country={item.country} figure={item[`${dataType}`]} flag={item.countryInfo.flag} />)}
         </div>
     </div>

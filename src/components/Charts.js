@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import DrawLineChart from './DrawLineChart';
 import DrawBarChart from './DrawBarChart';
+import Spinner from './Spinner';
 
 const Charts = () => {
   const [totalData, setTotalData] = useState(null);
@@ -13,7 +14,7 @@ const Charts = () => {
   }, []);
   
   if (!totalData) {
-    return <pre>Loading chart...</pre>;
+    return <Spinner />;
   }
 
   return (
@@ -25,12 +26,12 @@ const Charts = () => {
         <DrawBarChart data={totalData} type={dataType} />
         <div className='barchart-buttons'>
           <button 
-            className='waves-effect waves-light btn-small'
+            className='blue-grey waves-effect waves-light btn-small'
             onClick={e => setDataType(e.target.value)}
             value='cases'
           >Daily Cases</button>
           <button 
-            className='waves-effect waves-light btn-small'
+            className='blue-grey waves-effect waves-light btn-small'
             onClick={e => setDataType(e.target.value)}
             value='deaths'
           >Daily Deaths</button>

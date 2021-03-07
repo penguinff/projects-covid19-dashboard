@@ -163,12 +163,12 @@ const DrawLineChart = ({ data }) => {
       .attr('stroke-width', 2)
       .attr('stroke-dasharray', 4)
     // create hover circles
-    const circleCase = graph.append('circle')
-      .attr('r', 5)
-      .attr('fill', color.cases)
     const circleDeath = graph.append('circle')
       .attr('r', 5)
       .attr('fill', color.deaths)
+    const circleCase = graph.append('circle')
+      .attr('r', 5)
+      .attr('fill', color.cases)
     // create tooltips
     const tooltipDate = graph.append('text')
       .attr('class', 'tooltip-date')

@@ -48,12 +48,12 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
   // set scales for maps
   const scale = {
     cases: [100, 1000, 10000, 100000, 1000000, 10000000, 20000000, 30000000],
-    deaths: [0, 100, 1000, 10000, 100000, 500000, 1000000],
-    ratio: [0, 1, 2, 5, 10, 15, 20, 25]
+    deaths: [0, 100, 1000, 10000, 50000, 100000, 200000, 500000],
+    ratio: [0, 1, 2, 3, 4, 5, 10, 20]
   }
   // set color schemes for maps
   const casesScheme = d3.schemeYlGnBu[9]
-  const deathsScheme = d3.schemeYlOrRd[8]
+  const deathsScheme = d3.schemeYlOrRd[9]
   const ratioScheme = d3.schemePuRd[9]
   const colorScheme = {
     cases: casesScheme,
@@ -62,9 +62,9 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
   }
   // set legend scales for maps
   const tickScale = {
-    cases: ['100', '1K', '10K', '100K', '1M', '10M', '20M', '30M'],
-    deaths: ['0', '100', '1K', '10K', '100K', '500K', '1M'],
-    ratio: [0, 1, 2, 5, 10, 15, 20, 25]
+    cases: scale.cases.map(i => d3.format('.2~s')(i)),
+    deaths: scale.deaths.map(i => d3.format('.2~s')(i)),
+    ratio: scale.ratio
   }
 
   // set ref for d3 to get the DOM

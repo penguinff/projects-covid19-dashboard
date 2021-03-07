@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import DrawWorldMap from './DrawWorldMap';
+import Spinner from './Spinner';
 
 const mapTopojsonAPI = 'https://unpkg.com/world-atlas@2.0.2/countries-50m.json';
 const covidCountryDataAPI = 'https://disease.sh/v3/covid-19/countries?yesterday=false&twoDaysAgo=false&allowNull=true';
@@ -8,7 +9,7 @@ const covidCountryDataAPI = 'https://disease.sh/v3/covid-19/countries?yesterday=
 const WorldMap = () => {
   const [mapTopojson, setMapTopojson] = useState(null);
   const [countryResults, setCountryResults] = useState(null);
-  const [mapType, setMapType] = useState('cases');
+  const [mapType, setMapType] = useState(0);
 
   useEffect(() => {
     Promise.all([
@@ -25,28 +26,35 @@ const WorldMap = () => {
   }, [])
 
   if (!mapTopojson || !countryResults) {
-    return <pre>Loading map...</pre>;
+    return <Spinner />;;
   }
-  
+
+  const map = ['cases', 'deaths', 'ratio'];
+  const mapTitle = ['Cumulative Cases', 'Cumulative Deaths', 'Case-Fatality Ratio']; 
+  const plusSlide = (n) => {
+    if (mapType === 0 && n === -1) {
+      setMapType(map.length - 1)
+    } else if (mapType === map.length - 1 && n === 1) {
+      setMapType(0)
+    } else {
+      setMapType(mapType + n);
+    }
+  }
+
   return (
-    <div className='section worldmap-group'>
-      <DrawWorldMap mapTopojson={mapTopojson} countryResults={countryResults} mapType={mapType}/>
-      <div className='worldmap-buttons'>
+    <div className='worldmap-group'>
+      <DrawWorldMap mapTopojson={mapTopojson} countryResults={countryResults} mapType={map[mapType]}/>
+      <div className='map-change'>
+        <button
+          className='arrow' 
+          onClick={e => plusSlide(-1)}
+        ><i className='material-icons'>chevron_left</i></button>
+        <div className='map-title'>{mapTitle[mapType]}</div>
         <button 
-        className='waves-effect waves-light btn-small'
-        onClick={e => setMapType(e.target.value)}
-        value='cases'
-        >Cumulative Cases</button>
-        <button 
-          className='waves-effect waves-light btn-small'
-          onClick={e => setMapType(e.target.value)}
+          className='arrow' 
+          onClick={e => plusSlide(1)}
           value='deaths'
-        >Cumulative Deaths</button>
-        <button 
-          className='waves-effect waves-light btn-small'
-          onClick={e => setMapType(e.target.value)}
-          value='ratio'
-        >Case-Fatality Ratio</button>
+        ><i className='material-icons'>chevron_right</i></button>
       </div>
     </div>
   );
