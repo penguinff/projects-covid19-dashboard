@@ -11,14 +11,33 @@
   margin: auto;
 }
 
+.last-updated {
+  margin: auto;
+  /* margin-bottom: 10px; */
+  border: solid 1px;
+  padding: 2px;
+  border-bottom: solid 0.5px;
+  border-color: rgb(201, 201, 201);
+  background-color: rgb(251, 251, 251);
+  border-radius: 10px;
+}
+
 .info-cards {
   margin: auto;
-  /* max-width: 270px; */
-  height: 100vh;
-  overflow-y: scroll;
+  /* height: 100vh; */
   border: solid 1px;
   border-color: rgb(201, 201, 201);
   border-radius: 10px;
+  background-color: rgb(251, 251, 251);
+}
+
+.info-cards-scroll {
+  margin: auto;
+  height: 85vh;
+  overflow-y: scroll;
+  border: solid 1px;
+  border-color: rgb(201, 201, 201);
+  /* border-radius: 0 0 10px 10px; */
   background-color: rgb(251, 251, 251);
 }
 
@@ -37,14 +56,14 @@
 }
 
 .info-card-summary {
+  width: 250px;
   text-transform: uppercase;
   font-family: 'Roboto Condensed', sans-serif;
   font-size: 20px;
   text-align: center;
-  border-bottom: solid 0.5px;
-  border-color: rgb(201, 201, 201);
   background-color: rgb(251, 251, 251);
   font-weight: 600;
+  margin-bottom: 10px;
 }
 
 .info-card-figure {
@@ -77,7 +96,9 @@
   background-color: rgb(247, 247, 247);
 } */
 
-.map-change {
+.map-change,
+.barchart-change,
+.data-change {
   display: flex;
   justify-content: center;
   font-size: 20px;
@@ -258,4 +279,50 @@
 
 .s-text {
   font-size: 12px;
+}
+
+/* ------------------------------------ */
+.transition--enter {
+  opacity: 0;
+}
+.transition--enter-active {
+  opacity: 1;
+  transition: all 0.4s;
+}
+.transition--enter-done {
+  opacity: 1;
+}
+
+.transition--exit {
+  opacity: 1;
+}
+.transition--exit-active {
+  opacity: 0;
+  transition: all 0.4s;
+}
+.transition--exit-done {
+  opacity: 0;
+}
+
+/* --------------------------------------- */
+.transition2--enter {
+  transform: translateX(-20px);
+}
+.transition2--enter-active {
+  transform: translateX(0);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.transition2--enter-done {
+  transform: translateX(0);
+}
+
+.transition2--exit {
+  transform: translateX(0);
+}
+.transition2--exit-active {
+  transform: translateX(-20px);
+  transition: transform 0.8s cubic-bezier(0.83, 0, 0.17, 1);
+}
+.transition2--exit-done {
+  transform: translateX(-20px);
 }

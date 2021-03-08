@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import CSSTransition from 'react-transition-group/CSSTransition';
+import SwitchTransition from 'react-transition-group/SwitchTransition';
 import DrawWorldMap from './DrawWorldMap';
 import Spinner from './Spinner';
 
@@ -43,17 +45,35 @@ const WorldMap = () => {
 
   return (
     <div className='worldmap-group'>
-      <DrawWorldMap mapTopojson={mapTopojson} countryResults={countryResults} mapType={map[mapType]}/>
+      <SwitchTransition>
+        <CSSTransition
+          key={mapType}
+          timeout={200}
+          classNames='transition-'
+        >
+          <DrawWorldMap mapTopojson={mapTopojson} countryResults={countryResults} mapType={map[mapType]}/>
+        </CSSTransition>
+      </SwitchTransition>
+      
       <div className='map-change'>
         <button
           className='arrow' 
           onClick={e => plusSlide(-1)}
         ><i className='material-icons'>chevron_left</i></button>
-        <div className='map-title'>{mapTitle[mapType]}</div>
+        
+        <SwitchTransition>
+          <CSSTransition
+            key={mapType}
+            timeout={200}
+            classNames='transition2-'
+          >
+            <div className='map-title'>{mapTitle[mapType]}</div>
+          </CSSTransition>
+        </SwitchTransition>
+        
         <button 
           className='arrow' 
           onClick={e => plusSlide(1)}
-          value='deaths'
         ><i className='material-icons'>chevron_right</i></button>
       </div>
     </div>
