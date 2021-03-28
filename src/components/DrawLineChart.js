@@ -189,7 +189,7 @@ const DrawLineChart = ({ data }) => {
       .attr('height', graphHeight)
       .attr('fill', 'none')
       .attr('pointer-events', 'all')
-      .on('touchmove mousemove', (event) => {
+      .on('mousemove', (event) => {
         graph.select('.ask-hover')
           .style('opacity', 0)
         const x = d3.pointer(event)[0]
