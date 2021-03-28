@@ -13,7 +13,7 @@ const NewsCards = () => {
   const newsAPI = `https://newsapi.org/v2/top-headlines?q=coronavirus&language=en&from=${todayDate}&sortBy=publishedAt&apiKey=${APIKey}`;
   // https://newsapi.org/v2/everything?q=covid-19&from=2021-3-6&sortBy=publishedAt&sources=bbc-news&apiKey=80fbb6e4de8a4ea3b8df438b8f35afd8
   
-  const [newsData, setNewsData] = useState(null)
+  const [newsData, setNewsData] = useState(null);
 
   useEffect(() => {
     fetch(newsAPI)
@@ -21,14 +21,14 @@ const NewsCards = () => {
       .then(data => setNewsData(data))
   }, []);
 
-  if (!newsData || newsData === undefined) {
+  if (!newsData) {
     return <Spinner />;
   }
 
   return (
     <div className='section news-cards'>
       <div className='news-card-summary'>COVID-19 Related News</div>
-      {newsData && newsData.articles.map(item => <NewsCard key={item.url} newsArticle={item}/>)}
+      {newsData.articles.map(item => <NewsCard key={item.url} newsArticle={item}/>)}
     </div>
   )
 }
