@@ -28,7 +28,7 @@ const NewsCards = () => {
   return (
     <div className='section news-cards'>
       <div className='news-card-summary'>COVID-19 Related News</div>
-      {newsData.articles.map(item => <NewsCard key={item.url} newsArticle={item}/>)}
+      {newsData && newsData.articles.map(item => <NewsCard key={item.url} newsArticle={item}/>)}
     </div>
   )
 }
