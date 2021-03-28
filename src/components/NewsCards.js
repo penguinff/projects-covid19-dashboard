@@ -21,7 +21,7 @@ const NewsCards = () => {
       .then(data => setNewsData(data))
   }, []);
 
-  if (!newsData) {
+  if (!newsData || newsData === undefined) {
     return <Spinner />;
   }
 
