@@ -5,10 +5,17 @@
   background-color: rgb(231, 231, 231);
   /* background-color: rgb(78, 78, 78); */
   font-family: 'Roboto Condensed', sans-serif;
+  overflow-x: hidden;
 }
 
 .homepage {
   margin: auto;
+}
+
+.header-text {
+  font-size: 30px;
+  font-weight: 600;
+  color: rgb(241, 241, 241);
 }
 
 .last-updated {
