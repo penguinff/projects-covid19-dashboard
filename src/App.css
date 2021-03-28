@@ -36,7 +36,7 @@
 
 .info-cards-scroll {
   margin: auto;
-  height: 85vh;
+  height: 75vh;
   overflow-y: scroll;
   border: solid 1px;
   border-color: rgb(201, 201, 201);
