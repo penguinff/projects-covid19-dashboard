@@ -33,10 +33,10 @@ const Charts = () => {
 
   return (
     <div className='section row charts-group'>
-      <div className='col s12 m12 l6'>
+      <div className='col s12 m12 l6 line-chart'>
         <DrawLineChart data={totalData} />
       </div>
-      <div className='col s12 m12 l6'>
+      <div className='col s12 m12 l6 bar-chart'>
         <SwitchTransition>
           <CSSTransition
             key={dataType}

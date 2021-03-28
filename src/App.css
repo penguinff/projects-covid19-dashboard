@@ -26,7 +26,7 @@
 }
 
 .info-cards {
-  margin: 0 auto 40px;
+  margin: 0 auto 25px;
   /* height: 100vh; */
   border: solid 1px;
   border-color: rgb(201, 201, 201);
@@ -168,6 +168,11 @@
   font-size: 12px;
   user-select: none;
   font-family: 'Roboto Condensed', sans-serif;
+}
+
+.line-chart,
+.bar-chart {
+  margin-bottom: 20px;
 }
 
 .linechart-svg,
