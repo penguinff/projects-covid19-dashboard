@@ -289,6 +289,13 @@
   font-size: 12px;
 }
 
+.footer {
+  padding: 20px;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
 /* ------------------------------------ */
 .transition--enter {
   opacity: 0;
