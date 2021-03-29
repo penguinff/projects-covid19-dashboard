@@ -1,70 +1,35 @@
-# Getting Started with Create React App
+# COVID-19 Dashboard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![image](https://github.com/penguinff/readme_pictures/blob/57a75a1d666a14028c8e5f64e33e97749e6234ad/covid-19-dashboard/dashboard.gif)
 
-## Available Scripts
+## 網頁 Demo
 
-In the project directory, you can run:
+https://covid-19-dashboard-penf.herokuapp.com/
 
-### `npm start`
+## 簡介
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+此網頁為前端練習作品，主要練習 API 串接、D3.js 建置圖表
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### 網頁主要功能
 
-### `npm test`
+- 串接第三方 API，取得全球各國的 COVID-19 最新確診跟死亡數據
+- 使用 D3.js 製作互動式圖表，把資料視覺化
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 主要練習
 
-### `npm run build`
+- React
+- D3.js
+- Materialise CSS
+- 串接第三方 API
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 使用外掛程式模組
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- react-transition-group (React 過場動畫)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 製作時間
 
-### `npm run eject`
+- 約 10 個工作天
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## 資料來源
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- <https://disease.sh/>
