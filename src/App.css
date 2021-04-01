@@ -216,6 +216,49 @@
   shape-rendering: crispEdges;
 }
 
+/* ----- News Cards ----- */
+.news-cards {
+  margin: auto;
+  height: 90vh;
+  overflow-y: scroll;
+  border: solid 1px;
+  border-color: rgb(201, 201, 201);
+  border-radius: 10px;
+  background-color: rgb(251, 251, 251);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.news-card {
+  width: 95%;
+  text-align: left;
+}
+
+.news-card-summary {
+  font-size: 25px;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.news-title {
+  font-size: 16px;
+  text-decoration: underline;
+}
+
+.news-description {
+  /* text-overflow: ellipsis;
+  white-space: nowrap; */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.s-text {
+  font-size: 12px;
+}
+
 /* ----- Footer ----- */
 .footer {
   padding: 20px;

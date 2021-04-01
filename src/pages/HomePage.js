@@ -1,14 +1,18 @@
 import InfoCards from '../components/InfoCards';
 import MapChartGroup from '../components/MapChartGroup';
+import NewsCards from '../components/NewsCards';
 
 const HomePage = () => {
   return (
     <div className='section row'>
-      <div className='col s12 m3 xl2 push-xl1'>
+      <div className='col m12 l2'>
         <InfoCards />
       </div>
-      <div className='col s12 m9 xl8 push-xl1'>
+      <div className='col m12 l8'>
         <MapChartGroup />
+      </div>
+      <div className='col m12 l2'>
+        <NewsCards />
       </div>
     </div>
   );
