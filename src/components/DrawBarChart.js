@@ -33,7 +33,7 @@ const DrawBarChart = ({ data, type }) => {
   }
 
   // set ref for d3 to get the DOM
-  const barchartRef = useRef();
+  const barchartRef = useRef(null);
 
   useEffect(() => {
     // resetting to blank map

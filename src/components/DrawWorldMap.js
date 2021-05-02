@@ -68,7 +68,7 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
   }
 
   // set ref for d3 to get the DOM
-  const mapRef = useRef();
+  const mapRef = useRef(null);
   useEffect(() => {
     // resetting to blank map
     d3.select('.map-svg').remove();

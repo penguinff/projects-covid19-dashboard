@@ -22,7 +22,7 @@ const DrawLineChart = ({ data }) => {
   }
   
   // set ref for d3 to get the DOM
-  const linechartRef = useRef();
+  const linechartRef = useRef(null);
 
   useEffect(() => {
     // resetting to blank map
