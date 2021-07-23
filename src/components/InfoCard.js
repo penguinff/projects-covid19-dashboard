@@ -3,7 +3,7 @@ const InfoCard = ({ country, figure, flag }) => {
     <div className='info-card'>
       <div className='info-card-figure'>{figure.toLocaleString()}</div> 
       <div className='info-card-flag'>
-        <img src={flag} className='info-card-flag-img' />
+        <img src={flag} alt='flag' className='info-card-flag-img' />
       </div>
       <div className='info-card-country'>{country}</div>
     </div>

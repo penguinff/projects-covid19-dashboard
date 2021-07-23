@@ -37,7 +37,7 @@ const InfoCards = () => {
       setCountryData(responseData[0])
       setGlobalData(responseData[1])
     })
-  }, [dataType]);
+  }, [dataType, countryDataAPI]);
 
   if (!countryData || !globalData) {
     return <Spinner />;
@@ -46,12 +46,15 @@ const InfoCards = () => {
   return (
     <div>
       <p className='last-updated'>Last Updated at: <br/>{new Date(globalData.updated).toLocaleTimeString(undefined,options)}</p>
+      
       <div className='section info-cards'>
         <div className='data-change'>
           <button
             className='arrow' 
-            onClick={e => plusSlide(-1)}
-          ><i className='material-icons'>chevron_left</i></button>
+            onClick={() => plusSlide(-1)}
+          >
+            <i className='material-icons'>chevron_left</i>
+          </button>
           
           <SwitchTransition>
             <CSSTransition
@@ -65,8 +68,10 @@ const InfoCards = () => {
           
           <button 
             className='arrow' 
-            onClick={e => plusSlide(1)}
-          ><i className='material-icons'>chevron_right</i></button>
+            onClick={() => plusSlide(1)}
+          >
+            <i className='material-icons'>chevron_right</i>
+          </button>
         </div>
 
         <SwitchTransition>
@@ -82,7 +87,6 @@ const InfoCards = () => {
         </SwitchTransition>
       </div>
     </div>
-    
   )
 }
 
