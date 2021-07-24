@@ -4,7 +4,6 @@
   text-align: center;
   background-color: rgb(231, 231, 231);
   font-family: 'Roboto Condensed', sans-serif;
-  overflow-x: hidden;
   user-select: none;
 }
 
@@ -21,16 +20,14 @@
 .data-change {
   display: flex;
   justify-content: center;
+  align-items: center;
   font-size: 20px;
 }
 
-.map-title {
+.mapchart-title {
   width: 250px;
   font-size: 18px;
   font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .arrow {
@@ -42,16 +39,16 @@
   transition: 0.3s;
 }
 
-.material-icons {
-  font-size: 30px;
-}
-
 .arrow:hover {
   color: rgb(255, 208, 0);
 }
 
 .arrow:focus {
   background-color: transparent;
+}
+
+.material-icons {
+  font-size: 30px;
 }
 
 /* ----- Info Cards ----- */

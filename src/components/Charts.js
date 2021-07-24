@@ -59,7 +59,7 @@ const Charts = () => {
               timeout={200}
               classNames='transition2-'
             >
-              <div className='map-title'>{barchartTitle[dataType]}</div>
+              <div className='mapchart-title'>{barchartTitle[dataType]}</div>
             </CSSTransition>
           </SwitchTransition>
           

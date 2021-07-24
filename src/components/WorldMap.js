@@ -71,7 +71,7 @@ const WorldMap = () => {
             timeout={200}
             classNames='transition2-'
           >
-            <div className='map-title'>{mapTitle[mapType]}</div>
+            <div className='mapchart-title'>{mapTitle[mapType]}</div>
           </CSSTransition>
         </SwitchTransition>
         
