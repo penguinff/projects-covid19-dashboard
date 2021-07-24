@@ -6,19 +6,21 @@ import DrawBarChart from './DrawBarChart';
 import Spinner from './Spinner';
 
 const Charts = () => {
+  // local state
   const [totalData, setTotalData] = useState(null);
   const [dataType, setDataType] = useState(0);
 
+  // fetch covid-19 global daily cumulative cases data in first render
   useEffect(() => {
-    fetch('https://disease.sh/v3/covid-19/historical/all?lastdays=1000')
-      .then(res => res.json())
-      .then(data => setTotalData(data));
+    const fetchGlobalCumulative = async () => {
+      const res = await fetch('https://disease.sh/v3/covid-19/historical/all?lastdays=1000');
+      const data = await res.json();
+      setTotalData(data);
+    };
+    fetchGlobalCumulative();
   }, []);
   
-  if (!totalData) {
-    return <Spinner />;
-  }
-
+  // define a function to control change of bar chart type
   const barchart = ['cases', 'deaths'];
   const barchartTitle = ['Daily Global Cases', 'Daily Global Deaths']; 
   const plusSlide = (n) => {
@@ -27,8 +29,13 @@ const Charts = () => {
     } else if (dataType === barchart.length - 1 && n === 1) {
       setDataType(0)
     } else {
-      setDataType(dataType + n);
+      setDataType(dataType => dataType + n);
     }
+  }
+
+  // display spinner if totalData is not ready
+  if (!totalData) {
+    return <Spinner />;
   }
 
   return (
@@ -36,6 +43,7 @@ const Charts = () => {
       <div className='col s12 m12 l6 line-chart'>
         <DrawLineChart data={totalData} />
       </div>
+
       <div className='col s12 m12 l6 bar-chart'>
         <SwitchTransition>
           <CSSTransition
@@ -50,8 +58,10 @@ const Charts = () => {
         <div className='barchart-change'>
           <button
             className='arrow' 
-            onClick={e => plusSlide(-1)}
-          ><i className='material-icons'>chevron_left</i></button>
+            onClick={() => plusSlide(-1)}
+          >
+            <i className='material-icons'>chevron_left</i>
+          </button>
           
           <SwitchTransition>
             <CSSTransition
@@ -65,8 +75,10 @@ const Charts = () => {
           
           <button 
             className='arrow' 
-            onClick={e => plusSlide(1)}
-          ><i className='material-icons'>chevron_right</i></button>
+            onClick={() => plusSlide(1)}
+          >
+            <i className='material-icons'>chevron_right</i>
+          </button>
         </div>
       </div>
     </div>
