@@ -26,7 +26,7 @@ const InfoCards = () => {
   }
 
   // API for global and country data
-  const countryDataAPI = `https://disease.sh/v3/covid-19/countries?yesterday=false&twoDaysAgo=false&sort=${data[dataType]}&allowNull=false`;
+  const sortedCountryDataAPI = `https://disease.sh/v3/covid-19/countries?yesterday=false&twoDaysAgo=false&sort=${data[dataType]}&allowNull=false`;
   const globalDataAPI = 'https://disease.sh/v3/covid-19/all?yesterday=false&twoDaysAgo=false&allowNull=false';
 
   // fetch global data in first render
@@ -42,12 +42,12 @@ const InfoCards = () => {
   // fetch country data in first render & every time the dataType changes (use the sorted data from API)
   useEffect(() => {
     const fetchCountryData = async () => {
-      let res = await fetch(countryDataAPI);
+      let res = await fetch(sortedCountryDataAPI);
       let data = await res.json();
       setCountryData(data);
     };
     fetchCountryData();
-  }, [countryDataAPI])
+  }, [sortedCountryDataAPI])
 
   // display spinner if countryData / globalData is not ready
   if (!countryData || !globalData) {
