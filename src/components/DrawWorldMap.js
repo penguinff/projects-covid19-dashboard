@@ -4,24 +4,27 @@ import { geoPatterson } from 'd3-geo-projection';
 import { feature } from 'topojson';
 
 const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
-  // convert topojson to geojson
-  const countries = feature(mapTopojson, mapTopojson.objects.countries);
+  // convert topojson to geojson so d3 can use
+  const countriesGeojson = feature(mapTopojson, mapTopojson.objects.countries);
   // get the features property from geojson object
-  let countryData = countries.features;
-  // change countryData array's id from string to number to match the id type in countryCases
-  countryData.forEach(item => item.id = +item.id);
-  // country names
+  const countriesGeoData = countriesGeojson.features;
+  // change countriesGeoData array's id from string to number to match the id type in countryFigures
+  countriesGeoData.forEach(item => item.id = +item.id);
+
+  // create an object of country names
   const countryNames = {}
   countryResults.forEach(d => countryNames[d.countryInfo._id] = d.country);
-  // country cases
-  const countryCases = {}
+  // create an object of country figures (cases / deaths / ratio)
+  const countryFigures = {}
   if (mapType === 'ratio') {
-    countryResults.forEach(d => countryCases[d.countryInfo._id] = (d.deaths / d.cases) *100);
+    countryResults.forEach(d => countryFigures[d.countryInfo._id] = (d.deaths / d.cases) *100);
   } else {
-      countryResults.forEach(d => countryCases[d.countryInfo._id] = d[`${mapType}`]);
+    countryResults.forEach(d => countryFigures[d.countryInfo._id] = d[mapType]);
   }
+  
   // fotmatting the number
-  const formatComma = d3.format(',')
+  const formatComma = d3.format(',');
+  const ratioFormat = d3.format('.2%');
   // country cases formatted
   const countryCasesFormatted = {}
   countryResults.forEach(d => countryCasesFormatted[d.countryInfo._id] = formatComma(d.cases));
@@ -30,21 +33,20 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
   countryResults.forEach(d => countryDeathsFormatted[d.countryInfo._id] = formatComma(d.deaths));
   // country deaths formatted
   const countryRatioFormatted = {}
-  const ratioFormat = d3.format(',.2%')
   countryResults.forEach(d => countryRatioFormatted[d.countryInfo._id] = ratioFormat(d.deaths / d.cases));
+  
   // fix the missing COVID-19 data for some countries
-  countryData.forEach(d => {
-    if(!countryNames[(d.id)]) {
-      countryNames[(d.id)] = d.properties.name;
+  countriesGeoData.forEach(d => {
+    if(!countryNames[d.id]) {
+      countryNames[d.id] = d.properties.name;
     }
-    if(!countryCases[(d.id)]) {
-      countryCasesFormatted[(d.id)] = 'No Info';
-      countryDeathsFormatted[(d.id)] = 'No Info';
-      countryRatioFormatted[(d.id)] = 'No Info';
+    if(!countryFigures[d.id]) {
+      countryCasesFormatted[d.id] = 'No Info';
+      countryDeathsFormatted[d.id] = 'No Info';
+      countryRatioFormatted[d.id] = 'No Info';
     }
   })
-  // set updated time
-  const updatedTime = d3.timeFormat("%d %b %Y, %H:%M %p")(new Date(countryResults[1].updated))
+
   // set scales for maps
   const scale = {
     cases: [100, 1000, 10000, 100000, 1000000, 10000000, 20000000, 30000000],
@@ -52,23 +54,24 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
     ratio: [0, 1, 2, 3, 4, 5, 10, 20]
   }
   // set color schemes for maps
-  const casesScheme = d3.schemeYlGnBu[9]
-  const deathsScheme = d3.schemeYlOrRd[9]
-  const ratioScheme = d3.schemePuRd[9]
+  const casesScheme = d3.schemeYlGnBu[9];
+  const deathsScheme = d3.schemeYlOrRd[9];
+  const ratioScheme = d3.schemePuRd[9];
   const colorScheme = {
     cases: casesScheme,
     deaths: deathsScheme,
     ratio: ratioScheme
-  }
+  };
   // set legend scales for maps
   const tickScale = {
-    cases: scale.cases.map(i => d3.format('.2~s')(i)),
-    deaths: scale.deaths.map(i => d3.format('.2~s')(i)),
+    cases: scale.cases.map(i => d3.format('~s')(i)),
+    deaths: scale.deaths.map(i => d3.format('~s')(i)),
     ratio: scale.ratio
-  }
+  };
 
   // set ref for d3 to get the DOM
   const mapRef = useRef(null);
+  // draw the map on every render
   useEffect(() => {
     // resetting to blank map
     d3.select('.map-svg').remove();
@@ -82,14 +85,14 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
       .attr('preserveAspectRatio', 'xMinYMid meet')
       .attr('viewBox', `0 0 ${dimension.width} ${dimension.height}`);
 
-    // color scale
+    // setting domain & range for the color scale
     const colorScale = d3.scaleThreshold()
-      .domain(scale[`${mapType}`])
-      .range(colorScheme[`${mapType}`]);
+      .domain(scale[mapType])
+      .range(colorScheme[mapType]);
 
-    // create a new projection function
+    // create a new projection type
     const projection = geoPatterson();
-    // create a GeoPath function from the projection
+    // create a GeoPath generator with the projection type
     const path = d3.geoPath()
       .projection(projection);
     
@@ -98,19 +101,20 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
       .attr('class', 'map-group');
     // select paths from the graph & pass country data
     const paths = graph.selectAll('path')
-      .data(countryData);
-    // append path to the group & set 'd' attribute
+      .data(countriesGeoData);
+    // create path elements according to data & set 'd' attribute with GeoPath generator
     paths.enter()
       .append('path')
       .attr('class', 'map-country')
       .attr('d', path)
       .attr('stroke', '#fff')
       .attr('stroke-width', 0.5)
-      .attr('fill', d => colorScale(countryCases[(d.id)]))
+      .attr('fill', d => colorScale(countryFigures[d.id]))
 
     // create a group to manage zoom button
     const zoomButtons = svg.append('g')
-    .attr('class', 'zoom-buttons')
+      .attr('class', 'zoom-buttons')
+    // set the icon
     const iconData = ['M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z', 'M19 13H5v-2h14v2z', 'M19 8l-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C8.97 19.54 10.43 20 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46C15.03 4.46 13.57 4 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z']
     const zoomIcon = zoomButtons.selectAll('.zoom-icon')
       .data(iconData)
@@ -120,6 +124,7 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
       .attr('transform', (d, i) => `translate(33, ${33 * (i + 1) + 2 * i})`)
       .attr('fill', 'black')
       .attr('d', d => d)
+    // set the square
     const zoomRectClass = ['map-zoom-in', 'map-zoom-out', 'map-zoom-reset'];
     const zoomRect = zoomButtons.selectAll('rect')
       .data(zoomRectClass)
@@ -184,14 +189,14 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
     const legendGroup = svg.append('g')
       .attr('class', 'legend-group')
     legendGroup.append('text')
-      .text(legendTitle[`${mapType}`])
       .attr('class', 'legend-text')
       .attr('x', 650)
       .attr('y', 385)
+      .text(legendTitle[mapType])
     const legendColors = legendGroup.append('g')
       .attr('class', 'legend-colors')
     const legendColor = legendColors.selectAll('.legend-color')
-      .data(scale[`${mapType}`])
+      .data(scale[mapType])
     legendColor.enter()
       .append('rect')
       .attr('class', 'legend-color')
@@ -202,9 +207,9 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
       .attr('fill', d => colorScale(d))
       .attr('opacity', 1)
     const legendTicks = legendGroup.append('g')
-    .attr('class', 'legend-ticks')
+      .attr('class', 'legend-ticks')
     const legendTick = legendTicks.selectAll('.legend-tick')
-      .data(tickScale[`${mapType}`])
+      .data(tickScale[mapType])
     legendTick.enter()
       .append('text')
       .attr('class', 'legend-tick')
@@ -212,22 +217,16 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
       .attr('y', 415)
       .text(d => d)
       .attr('opacity', 1)
-
-    // // create a group to manage udpated time
-    // svg.append('text')
-    //   .attr('class', 'updated-time') 
-    //   .attr('transform', 'translate(755,415)')
-    //   .attr('fill', 'grey')
-    //   .text(`Last Updated at: ${updatedTime}`)
       
-    // zoom the map
+    // set zoom behavior & set onZoom event listener
     const zoom = d3.zoom()
       .scaleExtent([1, 5])
       .on('zoom', (event) => {
         graph.attr('transform', event.transform)
       })
+    // call zoom behavior
     svg.call(zoom);
-    // zoom button
+    // set onClick event listener to zoom buttons
     d3.select('.map-zoom-in')
       .on('click', () => {
         zoom.scaleBy(svg.transition().duration(500), 1.5);
@@ -246,7 +245,7 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
           )
       });
 
-    // add mouse hover events
+    // add mouse hover event listeners
     graph.selectAll('.map-country')
       .on('mouseover', (event, d) => {
         d3.selectAll('.map-country')
@@ -261,13 +260,13 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
         d3.select('.tooltip-rect')
           .attr('height', 120)
         d3.select('.tooltip-text2')
-          .text(countryNames[(d.id)])
+          .text(countryNames[d.id])
         d3.select('.tooltip-text3')
-          .text(`- Cases: ${countryCasesFormatted[(d.id)]}`)
+          .text(`- Cases: ${countryCasesFormatted[d.id]}`)
         d3.select('.tooltip-text4')
-          .text(`- Deaths: ${countryDeathsFormatted[(d.id)]}`)
+          .text(`- Deaths: ${countryDeathsFormatted[d.id]}`)
         d3.select('.tooltip-text5')
-          .text(`- Case-Fatality Ratio: ${countryRatioFormatted[(d.id)]}`)
+          .text(`- Case-Fatality Ratio: ${countryRatioFormatted[d.id]}`)
       })
       .on('mouseout', (event, d) => {
         d3.selectAll('.map-country')
@@ -286,7 +285,7 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
         d3.select('.tooltip-text5')
           .text('')
       });
-  }, [mapType])
+  })
 
   return (
     <div className='worldmap' ref={mapRef}></div>
