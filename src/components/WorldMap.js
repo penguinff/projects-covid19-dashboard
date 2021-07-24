@@ -4,15 +4,17 @@ import SwitchTransition from 'react-transition-group/SwitchTransition';
 import DrawWorldMap from './DrawWorldMap';
 import Spinner from './Spinner';
 
-const mapTopojsonAPI = 'https://unpkg.com/world-atlas@2.0.2/countries-50m.json';
-const covidCountryDataAPI = 'https://disease.sh/v3/covid-19/countries?yesterday=false&twoDaysAgo=false&allowNull=true';
-// API DOC: https://corona.lmao.ninja/docs/
-
 const WorldMap = () => {
+  // local state
   const [mapTopojson, setMapTopojson] = useState(null);
   const [countryResults, setCountryResults] = useState(null);
   const [mapType, setMapType] = useState(0);
-
+  
+  // API for world map topojson and covid-19 country data
+  const mapTopojsonAPI = 'https://unpkg.com/world-atlas@2.0.2/countries-50m.json';
+  const covidCountryDataAPI = 'https://disease.sh/v3/covid-19/countries?yesterday=false&twoDaysAgo=false&allowNull=true';
+  
+  // fetch world map topojson and covid-19 country data in first render
   useEffect(() => {
     Promise.all([
       fetch(mapTopojsonAPI),
@@ -27,10 +29,7 @@ const WorldMap = () => {
     })
   }, [])
 
-  if (!mapTopojson || !countryResults) {
-    return <Spinner />;;
-  }
-
+  // define a function to control change of map type
   const map = ['cases', 'deaths', 'ratio'];
   const mapTitle = ['Cumulative Cases', 'Cumulative Deaths', 'Case-Fatality Ratio']; 
   const plusSlide = (n) => {
@@ -39,8 +38,13 @@ const WorldMap = () => {
     } else if (mapType === map.length - 1 && n === 1) {
       setMapType(0)
     } else {
-      setMapType(mapType + n);
+      setMapType(mapType => mapType + n);
     }
+  }
+
+  // display spinner if mapTopojson / countryResults is not ready
+  if (!mapTopojson || !countryResults) {
+    return <Spinner />;
   }
 
   return (
@@ -58,7 +62,7 @@ const WorldMap = () => {
       <div className='map-change'>
         <button
           className='arrow' 
-          onClick={e => plusSlide(-1)}
+          onClick={() => plusSlide(-1)}
         ><i className='material-icons'>chevron_left</i></button>
         
         <SwitchTransition>
@@ -73,7 +77,7 @@ const WorldMap = () => {
         
         <button 
           className='arrow' 
-          onClick={e => plusSlide(1)}
+          onClick={() => plusSlide(1)}
         ><i className='material-icons'>chevron_right</i></button>
       </div>
     </div>
