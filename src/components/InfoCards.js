@@ -32,8 +32,8 @@ const InfoCards = () => {
   // fetch global data in first render
   useEffect(() => {
     const fetchGlobalData = async () => {
-      let res = await fetch(globalDataAPI);
-      let data = await res.json();
+      const res = await fetch(globalDataAPI);
+      const data = await res.json();
       setGlobalData(data);
     };
     fetchGlobalData();
@@ -42,8 +42,8 @@ const InfoCards = () => {
   // fetch country data in first render & every time the dataType changes (use the sorted data from API)
   useEffect(() => {
     const fetchCountryData = async () => {
-      let res = await fetch(sortedCountryDataAPI);
-      let data = await res.json();
+      const res = await fetch(sortedCountryDataAPI);
+      const data = await res.json();
       setCountryData(data);
     };
     fetchCountryData();
