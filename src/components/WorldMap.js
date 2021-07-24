@@ -63,7 +63,9 @@ const WorldMap = () => {
         <button
           className='arrow' 
           onClick={() => plusSlide(-1)}
-        ><i className='material-icons'>chevron_left</i></button>
+        >
+          <i className='material-icons'>chevron_left</i>
+        </button>
         
         <SwitchTransition>
           <CSSTransition
@@ -78,7 +80,9 @@ const WorldMap = () => {
         <button 
           className='arrow' 
           onClick={() => plusSlide(1)}
-        ><i className='material-icons'>chevron_right</i></button>
+        >
+          <i className='material-icons'>chevron_right</i>
+        </button>
       </div>
     </div>
   );
