@@ -57,42 +57,17 @@
 /* ----- Info Cards ----- */
 .last-updated {
   margin: auto;
-  border: solid 1px;
   padding: 2px;
-  border-bottom: solid 0.5px;
-  border-color: rgb(201, 201, 201);
-  background-color: rgb(251, 251, 251);
+  border: solid 1px rgb(201, 201, 201);
   border-radius: 10px;
+  background-color: rgb(251, 251, 251);
 }
 
 .info-cards {
   margin: 0 auto 25px;
-  border: solid 1px;
-  border-color: rgb(201, 201, 201);
+  border: solid 1px rgb(201, 201, 201);
   border-radius: 10px;
   background-color: rgb(251, 251, 251);
-}
-
-.info-cards-scroll {
-  margin: auto;
-  height: 75vh;
-  overflow-y: scroll;
-  border: solid 1px;
-  border-color: rgb(201, 201, 201);
-  background-color: rgb(251, 251, 251);
-}
-
-.info-card {
-  font-size: 18px;
-  text-align: center;
-  padding: 2px;
-  border-bottom: solid 0.5px;
-  border-color: rgb(201, 201, 201);
-  display: flex;
-  align-items: center;
-  background-color: rgb(251, 251, 251);
-  display: flex;
-  justify-content: center;
 }
 
 .info-card-summary {
@@ -103,6 +78,26 @@
   background-color: rgb(251, 251, 251);
   font-weight: 600;
   margin-bottom: 10px;
+}
+
+.info-cards-scroll {
+  margin: auto;
+  height: 75vh;
+  overflow-y: auto;
+  overflow-x: auto;
+  border-top: solid 0.5px rgb(201, 201, 201);
+  background-color: rgb(251, 251, 251);
+}
+
+.info-card {
+  font-size: 18px;
+  text-align: center;
+  padding: 2px;
+  border-bottom: solid 0.5px rgb(201, 201, 201);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(251, 251, 251);
 }
 
 .info-card-figure {
@@ -230,7 +225,7 @@
 }
 .transition--enter-active {
   opacity: 1;
-  transition: all 0.4s;
+  transition: opacity 0.4s;
 }
 .transition--enter-done {
   opacity: 1;
@@ -241,7 +236,7 @@
 }
 .transition--exit-active {
   opacity: 0;
-  transition: all 0.4s;
+  transition: opacity 0.4s;
 }
 .transition--exit-done {
   opacity: 0;

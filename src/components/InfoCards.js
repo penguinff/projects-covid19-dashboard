@@ -5,12 +5,15 @@ import InfoCard from './InfoCard';
 import Spinner from './Spinner';
 
 const InfoCards = () => {
+  // local state
   const [countryData, setCountryData] = useState(null);
   const [globalData, setGlobalData] = useState(null);
   const [dataType, setDataType] = useState(0);
 
-  let options = { year: 'numeric', month: 'short', day: 'numeric' };
+  // customize the date time format
+  const options = { year: 'numeric', month: 'short', day: 'numeric', hour12: true };
 
+  // define a function to control change of data type
   const data = ['cases', 'deaths', 'recovered'];
   const plusSlide = (n) => {
     if (dataType === 0 && n === -1) {
@@ -18,34 +21,42 @@ const InfoCards = () => {
     } else if (dataType === data.length - 1 && n === 1) {
       setDataType(0)
     } else {
-      setDataType(dataType + n);
+      setDataType(dataType => dataType + n);
     }
   }
 
+  // API for global and country data
   const countryDataAPI = `https://disease.sh/v3/covid-19/countries?yesterday=false&twoDaysAgo=false&sort=${data[dataType]}&allowNull=false`;
   const globalDataAPI = 'https://disease.sh/v3/covid-19/all?yesterday=false&twoDaysAgo=false&allowNull=false';
 
+  // fetch global data in first render
   useEffect(() => {
-    Promise.all([
-      fetch(countryDataAPI),
-      fetch(globalDataAPI)
-    ]).then(async([res1, res2]) => {
-      const countryData = await res1.json();
-      const globalData = await res2.json();
-      return [countryData, globalData]
-    }).then((responseData) => {
-      setCountryData(responseData[0])
-      setGlobalData(responseData[1])
-    })
-  }, [dataType, countryDataAPI]);
+    const fetchGlobalData = async () => {
+      let res = await fetch(globalDataAPI);
+      let data = await res.json();
+      setGlobalData(data);
+    };
+    fetchGlobalData();
+  }, [])
 
+  // fetch country data in first render & every time the dataType changes (use the sorted data from API)
+  useEffect(() => {
+    const fetchCountryData = async () => {
+      let res = await fetch(countryDataAPI);
+      let data = await res.json();
+      setCountryData(data);
+    };
+    fetchCountryData();
+  }, [countryDataAPI])
+
+  // display spinner if countryData / globalData is not ready
   if (!countryData || !globalData) {
     return <Spinner />;
   }
 
   return (
     <div>
-      <p className='last-updated'>Last Updated at: <br/>{new Date(globalData.updated).toLocaleTimeString(undefined,options)}</p>
+      <p className='last-updated'>Last Updated at: <br/>{new Date(globalData.updated).toLocaleTimeString('en-US', options)}</p>
       
       <div className='section info-cards'>
         <div className='data-change'>
@@ -80,7 +91,7 @@ const InfoCards = () => {
             timeout={200}
             classNames='transition-'
           >
-            <div className='card info-cards-scroll'>
+            <div className='info-cards-scroll'>
               {countryData.map(item => <InfoCard key={item.country} country={item.country} figure={item[data[dataType]]} flag={item.countryInfo.flag} />)}
             </div>
           </CSSTransition>
