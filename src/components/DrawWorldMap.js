@@ -141,6 +141,7 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
       .attr('stroke', 'black')
       .attr('stroke-width', 2)
       .style('opacity', 0.4)
+      .style('cursor', 'pointer')
     
     // create a group to manage tooltip
     const tipBox = svg.append('g')
