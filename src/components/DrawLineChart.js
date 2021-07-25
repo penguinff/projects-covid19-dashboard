@@ -2,12 +2,12 @@ import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
 const DrawLineChart = ({ data }) => {
-  // format the data
-  const dataDateArray = Object.getOwnPropertyNames(data.cases);
+  // format the data into arrays
+  const dataDateArray = Object.keys(data.cases);
   const casesNumberArray = Object.values(data.cases);
   const deathNumberArray = Object.values(data.deaths);
   const dataFormatted = [];
-  for (let i = 0; i < Object.keys(data.cases).length; i++) {
+  for (let i = 0; i < dataDateArray.length; i++) {
     dataFormatted.push({
       date: dataDateArray[i],
       cases: casesNumberArray[i],
@@ -15,7 +15,7 @@ const DrawLineChart = ({ data }) => {
     })
   }
 
-  // set color of the line
+  // set color of the lines
   const color = {
     cases: '#6895e0',
     deaths: '#fb6779'
@@ -23,9 +23,9 @@ const DrawLineChart = ({ data }) => {
   
   // set ref for d3 to get the DOM
   const linechartRef = useRef(null);
-
+  // draw the line chart on every render
   useEffect(() => {
-    // resetting to blank map
+    // resetting to blank chart
     d3.select('.linechart-svg').remove();
 
     // setting the dimension of the chart
@@ -39,7 +39,9 @@ const DrawLineChart = ({ data }) => {
       .attr('class', 'linechart-svg')
       .attr('preserveAspectRatio', 'xMinYMid meet')
       .attr('viewBox', `0 0 ${graphWidth + margin.left + margin.right} ${graphHeight + margin.top + margin.bottom}`);
-    const graph = svg.append('g')
+    
+    // create a group to manage chart elements
+      const graph = svg.append('g')
       .attr('width', graphWidth)
       .attr('height', graphHeight)
       .attr('transform', `translate(${margin.left}, ${margin.top})`);
@@ -57,15 +59,15 @@ const DrawLineChart = ({ data }) => {
 
     // create axes
     const xAxis = d3.axisBottom(scaleX)
-      .ticks(10)
+      .ticks(20)
       .tickFormat(d3.timeFormat("%b %y"));
       const yAxis = d3.axisLeft(scaleY)
       .ticks(10)
-      .tickFormat(d3.format('.2~s'));
+      .tickFormat(d3.format('~s'));
       const yAxis2 = d3.axisRight(scaleY2)
-      .ticks(5)
-      .tickFormat(d3.format('.2~s'));
-    // axes groups
+      .ticks(10)
+      .tickFormat(d3.format('~s'));
+    // create axes groups & place them in the right position
     const xAxisGroup = graph.append('g')
       .attr('class', 'x-axis')
       .attr('transform', `translate(0, ${graphHeight})`)
@@ -112,8 +114,8 @@ const DrawLineChart = ({ data }) => {
 
     // path animation
     function tweenDash() {
-      const l = this.getTotalLength(),
-        i = d3.interpolateString(`0,${l}`, `${l},${l}`);
+      const l = this.getTotalLength();
+      const i = d3.interpolateString(`0,${l}`, `${l},${l}`);
       return function(t) { return i(t) };
     }
     
@@ -131,7 +133,7 @@ const DrawLineChart = ({ data }) => {
       .attr('d', line2)
       .transition()
         .duration(2500)
-        .attrTween("stroke-dasharray", tweenDash)
+        .attrTween('stroke-dasharray', tweenDash)
 
     // cases path
     // d3 line path generator
@@ -147,7 +149,7 @@ const DrawLineChart = ({ data }) => {
       .attr('d', line)
       .transition()
         .duration(2500)
-        .attrTween("stroke-dasharray", tweenDash)
+        .attrTween('stroke-dasharray', tweenDash)
 
     // create hover lines
     const lineDate = graph.append('line')
@@ -182,8 +184,7 @@ const DrawLineChart = ({ data }) => {
       .attr('text-anchor', 'end')
       .attr('fill', color.deaths)
 
-    // hover effect
-    const bisect = d3.bisector(d => new Date(d.date)).right;
+    // hover effect on the rectangle over the graph
     graph.append('rect')
       .attr('width', graphWidth - 1)
       .attr('height', graphHeight)
@@ -194,6 +195,7 @@ const DrawLineChart = ({ data }) => {
           .style('opacity', 0)
         const x = d3.pointer(event)[0]
         const hoveredDate = scaleX.invert(x)
+        const bisect = d3.bisector(d => new Date(d.date)).right;
         const i = bisect(dataFormatted, hoveredDate);
         lineDate
           .attr('x1', scaleX(new Date(dataFormatted[i].date)))
@@ -228,9 +230,8 @@ const DrawLineChart = ({ data }) => {
         tooltipDeath
           .attr('transform', `translate(${graphWidth -5}, ${scaleY2(dataFormatted[i].deaths) - 5})`)
           .text(formatComma(dataFormatted[i].deaths))
-      })
-
-  }, [])
+    })
+  })
 
   return (
     <div className='linechart' ref={linechartRef}></div>

@@ -3,12 +3,12 @@ import * as d3 from 'd3';
 import { tip as d3tip } from 'd3-v6-tip';
 
 const DrawBarChart = ({ data, type }) => {
-  // format the data
-  const dataDateArray = Object.getOwnPropertyNames(data.cases);
+  // format the data into arrays
+  const dataDateArray = Object.keys(data.cases);
   const casesNumberArray = Object.values(data.cases);
   const deathNumberArray = Object.values(data.deaths);
   const dataFormatted = [];
-  for (let i = 1; i < Object.keys(data.cases).length; i++) {
+  for (let i = 0; i < dataDateArray.length; i++) {
     dataFormatted.push({
       date: dataDateArray[i],
       cases: casesNumberArray[i] - casesNumberArray[i-1],
@@ -28,13 +28,13 @@ const DrawBarChart = ({ data, type }) => {
   }
   // set tick format
   const tick = {
-    cases: '.2~s',
+    cases: '~s',
     deaths: '~s'
   }
 
   // set ref for d3 to get the DOM
   const barchartRef = useRef(null);
-
+  // draw the bar chart on every render
   useEffect(() => {
     // resetting to blank map
     d3.select('.barchart-svg').remove();
@@ -60,36 +60,33 @@ const DrawBarChart = ({ data, type }) => {
       .domain(d3.extent(dataFormatted, d => new Date(d.date)))
       .range([0, graphWidth]);
     const scaleY = d3.scaleLinear()
-      .domain([0, d3.max(dataFormatted, d => d[`${type}`])])
+      .domain([0, d3.max(dataFormatted, d => d[type])])
       .range([graphHeight, 0]);
 
     // create axes
     const xAxis = d3.axisBottom(scaleX)
-      .ticks(10)
+      .ticks(20)
       .tickFormat(d3.timeFormat("%b %y"));
     const yAxis = d3.axisLeft(scaleY)
       .ticks(10)
-      .tickFormat(d3.format(tick[`${type}`]));
-
+      .tickFormat(d3.format(tick[type]));
     // axes groups
     const xAxisGroup = graph.append('g')
       .attr('class', 'x-axis')
       .attr('transform', `translate(0, ${graphHeight})`)
     const yAxisGroup = graph.append('g')
       .attr('class', 'y-axis')
-
     // call axes
     xAxisGroup.call(xAxis);
     yAxisGroup.call(yAxis);
-
     // axis labels
     graph.append('text')
       .attr('class', 'axis-label')
       .attr('text-anchor', 'end')
-      .attr('fill', color[`${type}`])
+      .attr('fill', color[type])
       .attr('x', -5)
       .attr('y', -5)
-      .text(label[`${type}`])
+      .text(label[type])
 
     // chart grid
     graph.append('g')
@@ -104,7 +101,7 @@ const DrawBarChart = ({ data, type }) => {
       .attr('text-anchor', 'middle')
       .attr('x', graphWidth / 2)
       .attr('y', -45)
-      .text('Daily Global ' + label[`${type}`])
+      .text('Daily Global ' + label[type])
     graph.append('text')
       .attr('class', 'ask-hover')
       .attr('fill', '#02e0e0')
@@ -124,12 +121,12 @@ const DrawBarChart = ({ data, type }) => {
       .attr('class', 'bar')
       .attr('width', barWidth)
       .attr('height', 0)
-      .attr('fill', color[`${type}`])
+      .attr('fill', color[type])
       .attr('x', (d, i) => i * barWidth)
       .attr('y', graphHeight)
       .transition().duration(1000)
-        .attr('height', d => graphHeight - scaleY(d[`${type}`]))
-        .attr('y', d => scaleY(d[`${type}`]))
+        .attr('height', d => graphHeight - scaleY(d[type]))
+        .attr('y', d => scaleY(d[type]))
 
     // set tooltip
     const tip = d3tip()
@@ -137,7 +134,7 @@ const DrawBarChart = ({ data, type }) => {
       .offset([-15, 0])
       .style('opacity', 0)
       .html((event, d) => {
-        const figure = d[`${type}`];
+        const figure = d[type];
         let content = `<div class='tip-date'>${d3.timeFormat('%d %b %y, %a')(new Date(d.date))}</div>`;
         content += `<div class='tip-figure'>${d3.format(',')(figure)}</div>`;
         return content;
@@ -155,11 +152,10 @@ const DrawBarChart = ({ data, type }) => {
       })
       .on('mouseout', (event, d) => {
         d3.select(event.currentTarget)
-          .attr('fill', color[`${type}`])
+          .attr('fill', color[type])
         tip.hide();
       })
-
-  }, [type])
+  })
 
   return (
     <div className='barchart' ref={barchartRef}></div>
