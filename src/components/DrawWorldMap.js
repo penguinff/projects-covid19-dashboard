@@ -71,7 +71,7 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
 
   // set ref for d3 to get the DOM
   const mapRef = useRef(null);
-  // draw the map on every render
+  // draw the map on first render & everytime map type changes
   useEffect(() => {
     // resetting to blank map
     d3.select('.map-svg').remove();
@@ -285,7 +285,7 @@ const DrawWorldMap = ({ mapTopojson, countryResults, mapType }) => {
         d3.select('.tooltip-text5')
           .text('')
       });
-  })
+  }, [mapType])
 
   return (
     <div className='worldmap' ref={mapRef}></div>

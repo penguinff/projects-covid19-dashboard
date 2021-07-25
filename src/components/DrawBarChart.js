@@ -34,7 +34,7 @@ const DrawBarChart = ({ data, type }) => {
 
   // set ref for d3 to get the DOM
   const barchartRef = useRef(null);
-  // draw the bar chart on every render
+  // draw the bar chart on first render & everytime chart type changes
   useEffect(() => {
     // resetting to blank map
     d3.select('.barchart-svg').remove();
@@ -155,7 +155,7 @@ const DrawBarChart = ({ data, type }) => {
           .attr('fill', color[type])
         tip.hide();
       })
-  })
+  }, [type])
 
   return (
     <div className='barchart' ref={barchartRef}></div>

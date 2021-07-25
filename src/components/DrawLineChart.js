@@ -23,7 +23,7 @@ const DrawLineChart = ({ data }) => {
   
   // set ref for d3 to get the DOM
   const linechartRef = useRef(null);
-  // draw the line chart on every render
+  // draw the line chart on first render
   useEffect(() => {
     // resetting to blank chart
     d3.select('.linechart-svg').remove();
@@ -231,7 +231,7 @@ const DrawLineChart = ({ data }) => {
           .attr('transform', `translate(${graphWidth -5}, ${scaleY2(dataFormatted[i].deaths) - 5})`)
           .text(formatComma(dataFormatted[i].deaths))
     })
-  })
+  }, [])
 
   return (
     <div className='linechart' ref={linechartRef}></div>
