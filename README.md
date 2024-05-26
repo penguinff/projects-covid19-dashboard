@@ -2,34 +2,34 @@
 
 ![image](https://github.com/penguinff/readme_pictures/blob/57a75a1d666a14028c8e5f64e33e97749e6234ad/covid-19-dashboard/dashboard.gif)
 
-## 網頁 Demo
+## Web Demo
 
-https://covid-19-dashboard-penf.herokuapp.com/
+https://covid19-dashboard.christinefong.site/
 
-## 簡介
+## Introduction
 
-此網頁為前端練習作品，主要練習 API 串接、D3.js 建置圖表
+This website is a front-end practice project, mainly for practicing API integration and creating visualization with D3.js.
 
-### 網頁主要功能
+### Main Features
 
-- 串接第三方 API，取得全球各國的 COVID-19 最新確診跟死亡數據
-- 使用 D3.js 製作互動式圖表，把資料視覺化
+- Integrate third-party API to obtain the latest COVID-19 confirmed cases and death data globally
+- Use D3.js to create interactive charts and data visualization
 
-### 主要練習
+### Main Practices
 
 - React
 - D3.js
 - Materialise CSS
-- 串接第三方 API
+- Integrating third-party API
 
-## 使用外掛程式模組
+## Plugins Used
 
-- react-transition-group (React 過場動畫)
+- react-transition-group (React transition animation)
 
-## 製作時間
+## Production Time
 
-- 約 10 個工作天
+- About 10 working days
 
-## 資料來源
+## Data Source
 
 - <https://disease.sh/>
